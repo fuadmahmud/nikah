@@ -23,11 +23,12 @@ const { onOpen }: SplashProps = $props();
   <div class="w-full h-full z-10 bg-black/35 absolute top-0 text-white flex flex-col items-center p-12">
     <div class="flex flex-col gap-2 text-center">
       <p class="font-light tracking-wide text-xs">THE WEDDING OF</p>
-      <h5 class="text-2xl font-dancing font-normal">FUAD & ANGGITA</h5>
+      <h5 class="text-2xl font-dancing font-normal tracking-wider">FUAD & ANGGITA</h5>
       <p class="font-light tracking-wide text-xs">{formatDate(WEDDING_DATE)?.toUpperCase()}</p>
     </div>
-    <div class="flex flex-col my-auto text-center">
+    <div class="flex flex-col my-auto text-center pb-12">
       <i>Kepada</i>
+      <i>Bapak & Ibu Test</i>
       <button class="bg-taupe-300 p-3 rounded-full text-slate-900 mt-4" type="button" onclick={onOpen}>
       Open Invitation
       </button>

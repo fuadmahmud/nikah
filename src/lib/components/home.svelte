@@ -1,12 +1,31 @@
 <script lang="ts">
-import { fly } from "svelte/transition";
+import { fade, fly } from "svelte/transition";
 import Section from "./section.svelte";
 import formatDate from "$lib/utils/formatDate";
 import { WEDDING_DATE } from "../../constants";
+import { onMount } from "svelte";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+onMount(() => {
+	gsap.registerPlugin(ScrollTrigger);
+	const sections = gsap.utils.toArray("#container > section") as HTMLElement[];
+
+	for (const section of sections) {
+		ScrollTrigger.create({
+			trigger: section,
+			start: "top top",
+			snap: {
+				snapTo: 1,
+				duration: 0.5,
+			},
+		});
+	}
+});
 </script>
 
-<div in:fly={{ y: 20, duration: 800 }} class="h-dvh w-dvw relative">
-  <section class="h-full w-full">
+<div in:fly={{ y: 20, duration: 800 }} class="w-dvw overflow-y-hidden" id="container">
+  <section class="h-dvh w-full relative" id="opening">
     <video 
       poster="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/poster.webp"
       loop
@@ -36,7 +55,7 @@ import { WEDDING_DATE } from "../../constants";
     imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/message.webp"
     imgAlt="opening-message"
   >
-    <div class="flex flex-col text-left h-full justify-end gap-4">
+    <div class="flex flex-col text-left h-full justify-end gap-4" in:fade={{ duration: 300 }}>
       <p class="text-3xl">Q.S. AR-RUM : 21</p>
       <p class="">Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
       <h5 class="text-2xl font-dancing tracking-wider">FUAD & ANGGITA</h5>

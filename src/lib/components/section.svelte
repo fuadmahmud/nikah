@@ -12,7 +12,7 @@ const { id, imgUrl, imgAlt, children }: SectionProps = $props();
 </script>
 
 
-<section class="h-full w-full relative" id={id}>
+<section class="h-dvh w-full relative" id={id}>
     <img
       src={imgUrl}
       alt={imgAlt}

@@ -7,13 +7,13 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		interface Platform {
-			env: {
-				COUNTER: DurableObjectNamespace;
-			};
-			context: {
-				waitUntil(promise: Promise<any>): void;
-			};
+			env: { COUNTER: DurableObjectNamespace };
+			context: { waitUntil(promise: Promise<any>): void };
 			caches: CacheStorage & { default: Cache };
+			env: Env;
+			ctx: ExecutionContext;
+			caches: CacheStorage;
+			cf?: IncomingRequestCfProperties
 		}
 	}
 }
