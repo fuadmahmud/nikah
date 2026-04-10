@@ -1,4 +1,5 @@
 <script lang="ts">
+import clsx from "$lib/utils/clsx";
 import type { Snippet } from "svelte";
 
 interface SectionProps {
@@ -6,19 +7,26 @@ interface SectionProps {
 	imgUrl: string;
 	imgAlt: string;
 	children: Snippet<[]>;
+	classNames?: string;
 }
 
-const { id, imgUrl, imgAlt, children }: SectionProps = $props();
+const { id, imgUrl, imgAlt, classNames, children }: SectionProps = $props();
+const classes = $derived(
+	clsx(
+		"h-screen w-full relative snap-start flex flex-col overflow-hidden",
+		classNames ?? "",
+	),
+);
 </script>
 
 
-<section class="h-dvh w-full relative" id={id}>
+<section class={classes} id={id}>
     <img
       src={imgUrl}
       alt={imgAlt}
       class="w-full h-full object-cover"
     >
-    <div class="w-full h-full z-10 bg-black/35 absolute top-0 text-white flex flex-col p-8">
+    <div class="w-full h-full z-10 bg-black/45 text-olive-200 absolute top-0 flex flex-col p-8">
       {@render children()}
     </div>
   </section>

@@ -1,31 +1,34 @@
 <script lang="ts">
-import { fade, fly } from "svelte/transition";
 import Section from "./section.svelte";
 import formatDate from "$lib/utils/formatDate";
 import { WEDDING_DATE } from "../../constants";
-import { onMount } from "svelte";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { onMount } from "svelte";
 
 onMount(() => {
 	gsap.registerPlugin(ScrollTrigger);
-	const sections = gsap.utils.toArray("#container > section") as HTMLElement[];
 
-	for (const section of sections) {
-		ScrollTrigger.create({
-			trigger: section,
-			start: "top top",
-			snap: {
-				snapTo: 1,
-				duration: 0.5,
+	gsap.fromTo(
+		".surah-text",
+		{
+			y: 1000,
+			scrollTrigger: {
+				trigger: ".surah-text",
+				toggleActions: "restart none none none",
 			},
-		});
-	}
+		},
+		{
+			y: "-=500",
+			duration: 2,
+			delay: 1,
+		},
+	);
 });
 </script>
 
-<div in:fly={{ y: 20, duration: 800 }} class="w-dvw overflow-y-hidden" id="container">
-  <section class="h-dvh w-full relative" id="opening">
+<div class="h-screen overflow-y-scroll snap-y snap-mandatory parent">
+  <section class="h-screen w-full relative snap-start flex flex-col overflow-hidden section" id="opening">
     <video 
       poster="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/poster.webp"
       loop
@@ -43,10 +46,7 @@ onMount(() => {
         <h5 class="text-2xl font-dancing tracking-wider">FUAD & ANGGITA</h5>
         <p class="font-light tracking-wide text-xs">{formatDate(WEDDING_DATE)?.toUpperCase()}</p>
       </div>
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-8">
-        <path d="M12 5v14"/>
-        <path d="m19 12-7 7-7-7"/>
-      </svg>
+      <div class="scroll-icon"></div>
     </div>
   </section>
 
@@ -55,10 +55,12 @@ onMount(() => {
     imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/message.webp"
     imgAlt="opening-message"
   >
-    <div class="flex flex-col text-left h-full justify-end gap-4" in:fade={{ duration: 300 }}>
-      <p class="text-3xl">Q.S. AR-RUM : 21</p>
-      <p class="">Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
-      <h5 class="text-2xl font-dancing tracking-wider">FUAD & ANGGITA</h5>
+    <div class="text-left h-full overflow-hidden">
+      <div class="surah-text flex flex-col justify-end gap-4 ">
+        <p class="text-2xl font-playfair tracking-wide">Q.S. AR-RUM : 21</p>
+        <p class="font-opensans text-sm">Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
+        <h5 class="text-2xl font-dancing tracking-wider">FUAD & ANGGITA</h5>
+      </div>
     </div>
   </Section>
 
@@ -68,10 +70,14 @@ onMount(() => {
     imgAlt="groom"
   >
     <div class="flex flex-col text-left h-full justify-end gap-4">
-      <p class="text-3xl">THE GROOM</p>
-      <p class="text-4xl">Fuad Mahmud Ibrahim</p>
-      <i>Putra ke 1 dari 4</i>
-      <p>Alm. Bapak Sunarto dan Ibu Puspita Sari</p>
+      <p class="font-playfair">THE GROOM</p>
+      <p class="text-3xl font-playfair">Fuad Mahmud I.</p>
+      <div class="flex items-center gap-4">
+        <i class="font-opensans">Putra ke 1 dari 4</i>
+        <div class="h-px w-auto grow bg-white"></div>
+      </div>
+      <p class="font-opensans text-sm">Alm. Bapak Sunarto dan Ibu Puspita Sari</p>
+      <i class="fa-brands fa-instagram"></i>
     </div>
   </Section>
 
@@ -81,11 +87,60 @@ onMount(() => {
     imgAlt="bride"
   >
     <div class="flex flex-col text-left h-full justify-end gap-4">
-      <p class="text-3xl">THE BRIDE</p>
-      <p class="text-4xl">Anggita Kusuma Putri</p>
-      <i>Putri ke 3 dari 3</i>
-      <p>Bapak Anwar Kusni dan Ibu Sri Suripni</p>
+      <p class="font-playfair">THE BRIDE</p>
+      <p class="text-3xl font-playfair">Anggita Kusuma P.</p>
+      <div class="flex items-center gap-4">
+        <i class="font-opensans">Putri ke 3 dari 3</i>
+        <div class="h-px w-auto grow bg-white"></div>
+      </div>
+      <p class="font-opensans text-sm">Bapak Anwar Kusni dan Ibu Sri Suripni</p>
+      <i class="fa-brands fa-instagram"></i>
     </div>
   </Section>
   
 </div>
+
+<style lang="scss">
+  .parent {
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .scroll-icon {
+	width: 50px;
+	height: 80px;
+	border: 1px solid white;
+	border-radius: 60px;
+	position: relative;
+  margin-top: 2rem;
+    &::before {
+      content: '';
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: white;
+      border-radius: 50%;
+      opacity: 1;
+      animation: wheel 2s infinite;
+      -webkit-animation: wheel 2s infinite;
+    }
+  }
+
+  @keyframes wheel {
+    to {
+      opacity: 0;
+      top: 60px;
+    }
+  }
+
+  @-webkit-keyframes wheel {
+    to {
+      opacity: 0;
+      top: 60px;
+    }
+  }
+</style>

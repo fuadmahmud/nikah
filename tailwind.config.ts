@@ -6,6 +6,7 @@ export default {
 			fontFamily: {
 				opensans: ["'Open Sans'", "sans-serif"],
 				dancing: ["'Dancing Script'", "cursive"],
+				playfair: ["'Playfair Display'", "serif"],
 			},
 		},
 	},

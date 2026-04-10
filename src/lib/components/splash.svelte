@@ -1,17 +1,28 @@
 <script lang="ts">
 import formatDate from "$lib/utils/formatDate";
-import { fade, scale } from "svelte/transition";
+import { blur, scale } from "svelte/transition";
 import { WEDDING_DATE } from "../../constants";
+import gsap from "gsap";
+import { onMount } from "svelte";
 
 interface SplashProps {
 	onOpen: () => void;
 }
 
 const { onOpen }: SplashProps = $props();
+
+onMount(() => {
+	gsap.to("#btn-open", {
+		duration: 3,
+		repeat: -1,
+		ease: "sine",
+		y: "+=20",
+	});
+});
 </script>
 
 
-<div class="w-dvw h-dvh flex" out:fade={{ duration: 800 }}>
+<div class="w-dvw h-dvh flex" transition:blur={{ duration: 750, delay: 150, opacity: 80  }}>
   <img
     src="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/background.webp"
     alt="background-welcome"
@@ -29,8 +40,8 @@ const { onOpen }: SplashProps = $props();
     <div class="flex flex-col my-auto text-center pb-12">
       <i>Kepada</i>
       <i>Bapak & Ibu Test</i>
-      <button class="bg-taupe-300 p-3 rounded-full text-slate-900 mt-4" type="button" onclick={onOpen}>
-      Open Invitation
+      <button class="mt-4 text-sm bg-olive-300 p-3 rounded-sm text-stone-500" type="button" onclick={onOpen} id="btn-open">
+        OPEN INVITATION
       </button>
     </div>
   </div>
