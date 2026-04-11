@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "nikah" generated at 2026-04-11T20:08:10.599Z.
