@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Dancing+Script:wght@400..700&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
 @theme {
-	--font-opensans: "Open Sans", sans-serif;
+	--font-opensans: "Playfair Display", sans-serif;
 	--font-dancing: "Dancing Script", cursive;
-	--font-playfair: "Playfair Display", serif;
+	--font-playfair: "Noto Serif", serif;
 }

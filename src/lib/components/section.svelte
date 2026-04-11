@@ -26,7 +26,7 @@ const classes = $derived(
       alt={imgAlt}
       class="w-full h-full object-cover"
     >
-    <div class="w-full h-full z-10 bg-black/45 text-olive-200 absolute top-0 flex flex-col p-8">
+    <div class="w-full h-full z-10 bg-white/5 text-olive-200 absolute top-0 flex flex-col p-8">
       {@render children()}
     </div>
   </section>

@@ -17,6 +17,7 @@ onMount(() => {
 		repeat: -1,
 		ease: "sine",
 		y: "+=20",
+		boxShadow: "rgb(216, 216, 208, 0.5) 0px 4px 12px",
 	});
 });
 </script>
