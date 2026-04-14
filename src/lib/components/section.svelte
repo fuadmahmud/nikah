@@ -20,7 +20,7 @@ const {
 }: SectionProps = $props();
 const classes = $derived(
 	clsx(
-		"h-screen w-full relative snap-start flex flex-col overflow-hidden",
+		"h-dvh w-full relative snap-start flex flex-col overflow-hidden",
 		classNames ?? "",
 	),
 );

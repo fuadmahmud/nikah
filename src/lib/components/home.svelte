@@ -4,34 +4,55 @@ import formatDate from "$lib/utils/formatDate";
 import { WEDDING_DATE } from "../../constants";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import { onDestroy, onMount } from "svelte";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
-let scrollContainer: HTMLDivElement;
 let gsapCtx: gsap.Context;
 
-onMount(() => {
+onMount(async () => {
+	await document.fonts.ready;
+
 	gsapCtx = gsap.context(() => {
+		ScrollTrigger.defaults({ scroller: ".parent" });
+		SplitText.create(".journey-text", {
+			type: "words",
+			reduceWhiteSpace: true,
+			onSplit: (self) => {
+				gsap.from(self.words, {
+					scrollTrigger: {
+						trigger: "#journey",
+						start: "top 80%",
+					},
+					opacity: 0,
+					autoAlpha: 0,
+					stagger: 0.05,
+					duration: 3,
+				});
+			},
+		});
+
 		gsap.fromTo(
 			".surah-text",
 			{
-				opacity: 0,
-				y: 200,
 				scrollTrigger: {
-					trigger: scrollContainer,
-					start: "top 80%",
-					toggleActions: "play none stop reverse",
+					trigger: "#surah",
+					start: "top center",
 				},
+				yPercent: 20,
+				opacity: 0,
 			},
 			{
-				y: "-=200",
+				yPercent: 0,
 				opacity: 1,
-				ease: "power2.out",
 				duration: 3,
-				delay: 2,
+				delay: 1.5,
+				ease: "power1.in",
 			},
 		);
+
+		ScrollTrigger.refresh();
 	});
 });
 
@@ -40,8 +61,8 @@ onDestroy(() => {
 });
 </script>
 
-<div class="h-screen overflow-y-scroll snap-y snap-mandatory parent font-opensans" bind:this={scrollContainer}>
-  <section class="h-screen w-full relative snap-start flex flex-col overflow-hidden section" id="opening">
+<div class="h-dvh overflow-y-scroll snap-y snap-mandatory parent font-opensans">
+  <section class="h-dvh w-full relative snap-start flex flex-col overflow-hidden section" id="opening">
     <video 
       poster="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/poster.webp"
       loop
@@ -66,12 +87,12 @@ onDestroy(() => {
   <Section
     id="surah"
     imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/seating.webp"
-    imgAlt="opening-message"
+    imgAlt="surah"
   >
     <div class="text-left h-max overflow-hidden mt-auto rounded-md p-2">
       <div class="surah-text flex flex-col justify-end gap-4">
         <h2 class="text-2xl font-playfair tracking-wide">Q.S. AR-RUM: 21</h2>
-        <p class="font-opensans text-xs">Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
+        <p class="font-opensans font-light text-sm/5">Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
         <h5 class="text-xl font-dancing tracking-wider">FUAD & ANGGITA</h5>
       </div>
     </div>
@@ -86,15 +107,15 @@ onDestroy(() => {
       <p class="font-playfair">THE BRIDE</p>
       <h3 class="text-2xl font-playfair border-t pt-1 w-max">Anggita Kusuma P.</h3>
       <i class="font-opensans">Putri ke 3 dari 3</i>
-      <p class="font-opensans text-sm">Bapak Anwar Kusni dan Ibu Sri Suripni</p>
+      <p class="font-opensans text-sm font-light">Bapak Anwar Kusni dan Ibu Sri Suripni</p>
       <a
         href="https://www.instagram.com/anggitaaksm_/"
         referrerpolicy="no-referrer"
         target="_blank"
         rel="no-referrer"
-        class="bg-olive-300 text-stone-500 p-1 rounded-md w-max">
+        class="backdrop-blur-xs bg-white/30 p-1 rounded-md w-max flex flex-row items-center">
         <i class="fa-brands fa-instagram"></i>
-        <span class="pr-0.5 text-sm">@anggitaaksm_</span>
+        <span class="pr-0.5 text-sm ml-0.5">@anggitaaksm_</span>
       </a>
     </div>
   </Section>
@@ -108,15 +129,15 @@ onDestroy(() => {
       <p class="font-playfair">THE GROOM</p>
       <h3 class="text-2xl font-playfair border-t w-max pt-2">Fuad Mahmud I.</h3>
       <i class="font-opensans">Putra ke 1 dari 4</i>
-      <p class="font-opensans text-sm">Alm. Bapak Sunarto dan Ibu Puspita Sari</p>
+      <p class="font-opensans text-sm font-light">Alm. Bapak Sunarto dan Ibu Puspita Sari</p>
       <a
         href="https://www.instagram.com/fuadmahmudi/"
         referrerpolicy="no-referrer"
         target="_blank"
         rel="no-referrer"
-        class="bg-olive-300 text-stone-500 p-1 rounded-md w-max">
+        class="backdrop-blur-xs bg-white/30 p-1 rounded-md w-max flex flex-row items-center">
         <i class="fa-brands fa-instagram"></i>
-        <span class="pr-0.5 text-sm">@fuadmahmudi</span>
+        <span class="pr-0.5 text-sm ml-0.5">@fuadmahmudi</span>
       </a>
     </div>
   </Section>
@@ -127,29 +148,37 @@ onDestroy(() => {
     imgAlt="journey"
   >
     <div class="flex flex-col text-left h-full gap-4 my-auto">
-      <h2 class="text-2xl font-playfair">OUR JOURNEY</h2>
-      <pre class="whitespace-pre-line font-opensans text-xs sm:text-sm">
+      <h2 class="text-2xl font-playfair text-center">OUR JOURNEY</h2>
+      <div class="journey-text font-light font-opensans text-[3vw] md:text-base">
         Terkadang, dua orang yang sudah begitu dekat jaraknya, justru dipertemukan pada waktu yang paling tepat.
-
-        Agustus 2023
+        <br />
+        <br />
+        <b>Agustus 2023</b>
+        <br />
         Kami dipertemukan di acara lamaran seorang teman, yang ternyata menjadi titik awal cerita kami. Sebenarnya kami sudah berada di lingkungan yang sama sejak lama, dan keluarga yang sudah saling mengenal, namun kami baru bertemu satu sama lain saat itu.
-
+        <br />
+        <br />
         Sejak hari itu, sebuah langkah kecil dimulai.
         Fuad memberanikan diri menyapa melalui media sosial, dan dari percakapan sederhana, tumbuh rasa nyaman yang perlahan  mendekatkan kami. 
-
-        Desember 2023
+        <br />
+        <br />
+        <b>Desember 2023</b>
+        <br />
         Kami memilih untuk berjalan bersama, saling menjaga, dan menguatkan dalam satu tujuan yang sama.
-
-        Januari 2026
+        <br />
+        <br />
+        <b>Januari 2026</b>
+        <br />
         Kami mengikat niat dalam sebuah lamaran, menyatukan dua keluarga dalam satu harapan.
-
-        Mei 2026 
+        <br />
+        <br />
+        <b>Mei 2026</b>
+        <br />
         Akan menjadi awal dari selamanya langkah baru sebagai dua hati yang dipersatukan dalam satu ikatan suci. 
-      </pre>
-      
+      </div>
     </div>
-  </Section>
-  
+  </Section> 
+
   <Section
     id="date"
     imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/location.webp"
@@ -163,14 +192,18 @@ onDestroy(() => {
           <p>AKAD NIKAH</p>
           <p>16.00</p>
           <p>GOR MATRAMAN</p>
-          <p class="font-opensans text-sm">Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120</p>
+          <p class="font-opensans font-light text-sm">
+            Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120
+          </p>
         </div>
         <div class="h-px w-auto grow bg-white"></div>
         <div class="font-playfair text-lg flex flex-col gap-1">
           <p>RESEPSI</p>
           <p>19.00</p>
           <p>GOR MATRAMAN</p>
-          <p class="font-opensans text-sm">Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120</p>
+          <p class="font-opensans font-light text-sm">
+            Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120
+          </p>
           <a
             href="https://maps.app.goo.gl/hrQ8rohJTUW7kLoW9"
             referrerpolicy="no-referrer"
@@ -261,7 +294,7 @@ onDestroy(() => {
   >
     <div class="flex flex-col text-center h-full justify-center gap-4 text-shadow-lg">
       <h2 class="text-2xl font-light font-playfair">UCAPAN TERIMA KASIH</h2>
-      <p class="text-sm">
+      <p class="text-sm font-light">
         Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
         Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
         kehadiran dan doa restunya, kami mengucapkan terima kasih.
