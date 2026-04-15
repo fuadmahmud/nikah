@@ -7,4 +7,5 @@
 	--font-opensans: "Playfair Display", sans-serif;
 	--font-dancing: "Dancing Script", cursive;
 	--font-playfair: "Noto Serif", serif;
+	--color-backdrop: oklch(0.1448 0 0);
 }

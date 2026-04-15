@@ -13,7 +13,7 @@ const { children } = $props();
 	<meta property="og:title" content="The Wedding of Fuad & Anggita">
 	<meta property="og:description" content="The Wedding Invitation of Fuad & Anggita">
 	<meta property="og:url" content="https://menikah.fuadmahmud.dev">
-	<meta property="og:image" content="https://menikah.fuadmahmud.dev/og-image.png">
+	<meta property="og:image" content="https://menikah.fuadmahmud.dev/og-image.jpg">
 	<meta property="og:image:height" content="1200">
 	<meta property="og:image:width" content="630">
 	<meta property="og:image:alt" content="You're invite to our wedding">

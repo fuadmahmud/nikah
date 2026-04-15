@@ -6,6 +6,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { onDestroy, onMount } from "svelte";
+import Slider from "./slider.svelte";
+import { PUBLIC_S3_URL } from "$env/static/public";
+import Counter from "./counter.svelte";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -16,6 +19,33 @@ onMount(async () => {
 
 	gsapCtx = gsap.context(() => {
 		ScrollTrigger.defaults({ scroller: ".parent" });
+
+		const surahTween = gsap.fromTo(
+			".surah-text",
+			{
+				yPercent: 20,
+				opacity: 0,
+			},
+			{
+				yPercent: 0,
+				opacity: 1,
+				duration: 2,
+				ease: "power3.out",
+				paused: true,
+				immediateRender: false,
+			},
+		);
+
+		ScrollTrigger.create({
+			trigger: "#surah",
+			start: "top 80%",
+			end: "bottom 20%",
+			onEnter: () => surahTween.restart(true),
+			onEnterBack: () => surahTween.restart(true),
+			onLeave: () => gsap.set(".surah-text", { yPercent: 20, opacity: 0 }),
+			onLeaveBack: () => gsap.set(".surah-text", { yPercent: 20, opacity: 0 }),
+		});
+
 		SplitText.create(".journey-text", {
 			type: "words",
 			reduceWhiteSpace: true,
@@ -33,25 +63,6 @@ onMount(async () => {
 			},
 		});
 
-		gsap.fromTo(
-			".surah-text",
-			{
-				scrollTrigger: {
-					trigger: "#surah",
-					start: "top center",
-				},
-				yPercent: 20,
-				opacity: 0,
-			},
-			{
-				yPercent: 0,
-				opacity: 1,
-				duration: 3,
-				delay: 1.5,
-				ease: "power1.in",
-			},
-		);
-
 		ScrollTrigger.refresh();
 	});
 });
@@ -62,31 +73,12 @@ onDestroy(() => {
 </script>
 
 <div class="h-dvh overflow-y-scroll snap-y snap-mandatory parent font-opensans">
-  <section class="h-dvh w-full relative snap-start flex flex-col overflow-hidden section" id="opening">
-    <video 
-      poster="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/poster.webp"
-      loop
-      autoplay
-      muted
-      playsinline
-      class="w-full h-full object-cover"
-    >
-      <source type="video/mp4" src="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/video-bg.mp4" />
-      Your browser doesn't support video tag
-    </video>
-    <div class="z-10 absolute inset-0 h-full w-full flex flex-col text-olive-200 p-12 items-center-safe bg-black/20">
-      <div class="flex flex-col gap-2 text-center">
-        <p class="font-playfair text-xl mb-4">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-        <p class="font-light tracking-wide text-xs">THE WEDDING OF</p>
-        <h4 class="text-2xl font-dancing tracking-wider">FUAD & ANGGITA</h4>
-      </div>
-      <div class="scroll-icon"></div>
-    </div>
-  </section>
+  <!-- Opening Section -->
+  <Slider />
 
   <Section
     id="surah"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/seating.webp"
+    imgUrl="{PUBLIC_S3_URL}/seating.webp"
     imgAlt="surah"
   >
     <div class="text-left h-max overflow-hidden mt-auto rounded-md p-2">
@@ -100,7 +92,7 @@ onDestroy(() => {
 
   <Section
     id="bride"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/bride.webp"
+    imgUrl="{PUBLIC_S3_URL}/bride.webp"
     imgAlt="bride"
   >
     <div class="flex flex-col text-left h-full justify-end gap-2">
@@ -122,7 +114,7 @@ onDestroy(() => {
 
   <Section
     id="groom"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/groom.webp"
+    imgUrl="{PUBLIC_S3_URL}/groom.webp"
     imgAlt="groom"
   >
     <div class="flex flex-col text-right items-end p-2 w-full justify-end gap-2 mt-auto">
@@ -144,7 +136,7 @@ onDestroy(() => {
 
   <Section
     id="journey"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/journey.webp"
+    imgUrl="{PUBLIC_S3_URL}/journey.webp"
     imgAlt="journey"
   >
     <div class="flex flex-col text-left h-full gap-4 my-auto">
@@ -181,11 +173,11 @@ onDestroy(() => {
 
   <Section
     id="date"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/location.webp"
+    imgUrl="{PUBLIC_S3_URL}/location.webp"
     imgAlt="date"
   >
-    <div class="my-auto">
-      <div class="flex flex-col text-left h-full justify-end gap-4">
+    <div>
+      <div class="flex flex-col justify-start gap-4 mb-4">
         <h2 class="text-2xl font-playfair">{formatDate(WEDDING_DATE)?.toUpperCase()}</h2>
         <div class="h-px w-auto grow bg-white"></div>
         <div class="font-playfair text-lg flex flex-col gap-1">
@@ -215,48 +207,14 @@ onDestroy(() => {
           </a>
         </div>
       </div>
+      <Counter />
     </div>
   </Section>
 
-  <Section
-    id="counter"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/journey.webp"
-    imgAlt="counter"
-  >
-    <div class="flex flex-col text-center gap-4 my-auto font-playfair">
-      <h2 class="text-2xl font-playfair">COUNT THE DATE</h2>
-      <div class="flex flex-row items-center w-full justify-evenly">
-        <div class="w-1/5">
-          <div class="font-playfair">
-            <p class="text-2xl">00</p>
-            <i>days</i>
-          </div>
-        </div>
-        <div class="w-1/5">
-          <div class="font-playfair">
-            <p class="text-2xl">00</p>
-            <i>hours</i>
-          </div>
-        </div>
-        <div class="w-1/5">
-          <div class="font-playfair">
-            <p class="text-2xl">00</p>
-            <i>minutes</i>
-          </div>
-        </div>
-        <div class="w-1/5">
-          <div class="font-playfair">
-            <p class="text-2xl">00</p>
-            <i>seconds</i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Section>
 
   <Section
     id="gift"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/journey.webp"
+    imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
     imgAlt="gift"
   >
     <div class="flex flex-col text-left h-full justify-center gap-4">
@@ -267,7 +225,7 @@ onDestroy(() => {
 
   <Section
     id="wishes"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/journey.webp"
+    imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
     imgAlt="wishes"
   >
     <div class="flex flex-col text-left h-full gap-4">
@@ -278,7 +236,7 @@ onDestroy(() => {
 
   <Section
     id="wishes"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/journey.webp"
+    imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
     imgAlt="wishes"
   >
     <div class="flex flex-col text-left h-full gap-4">
@@ -289,7 +247,7 @@ onDestroy(() => {
 
   <Section
     id="closing"
-    imgUrl="https://s3.ap-southeast-1.amazonaws.com/bucket.fmd.my.id/public/closing.webp"
+    imgUrl={`${PUBLIC_S3_URL}/closing.webp`}
     imgAlt="closing"
   >
     <div class="flex flex-col text-center h-full justify-center gap-4 text-shadow-lg">
@@ -310,42 +268,6 @@ onDestroy(() => {
     scrollbar-width: none;
     ::-webkit-scrollbar {
       display: none;
-    }
-  }
-  .scroll-icon {
-	width: 50px;
-	height: 80px;
-	border: 1px solid white;
-	border-radius: 60px;
-	position: relative;
-  margin-top: 2rem;
-    &::before {
-      content: '';
-      width: 12px;
-      height: 12px;
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: white;
-      border-radius: 50%;
-      opacity: 1;
-      animation: wheel 2s infinite;
-      -webkit-animation: wheel 2s infinite;
-    }
-  }
-
-  @keyframes wheel {
-    to {
-      opacity: 0;
-      top: 60px;
-    }
-  }
-
-  @-webkit-keyframes wheel {
-    to {
-      opacity: 0;
-      top: 60px;
     }
   }
 </style>
