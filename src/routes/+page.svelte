@@ -12,6 +12,7 @@ const handleOpen = () => {
 
 {#if isSplashPage}
   <Splash onOpen={handleOpen} />
-{:else}
+{/if}
+{#if !isSplashPage}
   <Home />
 {/if}

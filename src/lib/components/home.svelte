@@ -9,32 +9,31 @@ import { onDestroy, onMount } from "svelte";
 import Slider from "./slider.svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
 import Counter from "./counter.svelte";
+import Person from "./person.svelte";
+import { blur } from "svelte/transition";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 let gsapCtx: gsap.Context;
+let audioEl: HTMLAudioElement;
+let isAudioPlay = $state(true);
+let audioTimeout: ReturnType<typeof setTimeout>;
 
 onMount(async () => {
 	await document.fonts.ready;
 
 	gsapCtx = gsap.context(() => {
 		ScrollTrigger.defaults({ scroller: ".parent" });
+		gsap.set(".surah-text", { visibility: "hidden" });
 
-		const surahTween = gsap.fromTo(
-			".surah-text",
-			{
-				yPercent: 20,
-				opacity: 0,
-			},
-			{
-				yPercent: 0,
-				opacity: 1,
-				duration: 2,
-				ease: "power3.out",
-				paused: true,
-				immediateRender: false,
-			},
-		);
+		const surahTween = gsap.from(".surah-text", {
+			yPercent: -20,
+			autoAlpha: 0,
+			duration: 2,
+			stagger: 0.05,
+			ease: "power3.out",
+			immediateRender: false,
+		});
 
 		ScrollTrigger.create({
 			trigger: "#surah",
@@ -65,14 +64,42 @@ onMount(async () => {
 
 		ScrollTrigger.refresh();
 	});
+
+	audioTimeout = setTimeout(() => {
+		audioEl.play();
+	}, 1100);
+
+	document.addEventListener("visibilitychange", handleVisibilityChange);
 });
 
 onDestroy(() => {
-	gsapCtx?.revert();
+	gsapCtx?.kill();
+	clearTimeout(audioTimeout);
+	document.removeEventListener("visibilitychange", handleVisibilityChange);
 });
+
+function handleMusic() {
+	if (isAudioPlay) {
+		audioEl.pause();
+	} else {
+		audioEl.play();
+	}
+	isAudioPlay = !isAudioPlay;
+}
+
+function handleVisibilityChange() {
+	const visibility = document.visibilityState === "visible";
+
+	if (!visibility) {
+		audioEl.pause();
+	} else {
+		audioEl.play();
+	}
+	isAudioPlay = visibility;
+}
 </script>
 
-<div class="h-dvh overflow-y-scroll snap-y snap-mandatory parent font-opensans">
+<div class="h-dvh overflow-y-scroll snap-y snap-mandatory parent font-opensans" in:blur={{ duration: 900, delay: 1100, opacity: 80 }}>
   <!-- Opening Section -->
   <Slider />
 
@@ -81,56 +108,71 @@ onDestroy(() => {
     imgUrl="{PUBLIC_S3_URL}/seating.webp"
     imgAlt="surah"
   >
-    <div class="text-left h-max overflow-hidden mt-auto rounded-md p-2">
+    <div class="text-left h-max overflow-hidden rounded-md p-2 mt-[25%]">
       <div class="surah-text flex flex-col justify-end gap-4">
         <h2 class="text-2xl font-playfair tracking-wide">Q.S. AR-RUM: 21</h2>
         <p class="font-opensans font-light text-sm/5">Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
-        <h5 class="text-xl font-dancing tracking-wider">FUAD & ANGGITA</h5>
       </div>
     </div>
   </Section>
 
-  <Section
-    id="bride"
-    imgUrl="{PUBLIC_S3_URL}/bride.webp"
-    imgAlt="bride"
-  >
-    <div class="flex flex-col text-left h-full justify-end gap-2">
-      <p class="font-playfair">THE BRIDE</p>
-      <h3 class="text-2xl font-playfair border-t pt-1 w-max">Anggita Kusuma P.</h3>
-      <i class="font-opensans">Putri ke 3 dari 3</i>
-      <p class="font-opensans text-sm font-light">Bapak Anwar Kusni dan Ibu Sri Suripni</p>
-      <a
-        href="https://www.instagram.com/anggitaaksm_/"
-        referrerpolicy="no-referrer"
-        target="_blank"
-        rel="no-referrer"
-        class="backdrop-blur-xs bg-white/30 p-1 rounded-md w-max flex flex-row items-center">
-        <i class="fa-brands fa-instagram"></i>
-        <span class="pr-0.5 text-sm ml-0.5">@anggitaaksm_</span>
-      </a>
-    </div>
-  </Section>
+  <Person
+    role="bride"
+    imgEndpoint="bride.webp"
+    name="Anggita Kusuma Putri"
+    child="Putri ke 3"
+    parent="Bapak Anwar Kusni dan Ibu Sri Suripni"
+    social="@anggitaaksm_"
+    position="left"
+  />
+
+  <Person
+    role="groom"
+    imgEndpoint="groom.webp"
+    name="Fuad Mahmud Ibrahim"
+    child="Putra ke 1"
+    parent="Alm. H. Sunarto dan Ibu Hj. Puspita Sari"
+    social="@fuadmahmudi"
+    position="right"
+  />
 
   <Section
-    id="groom"
-    imgUrl="{PUBLIC_S3_URL}/groom.webp"
-    imgAlt="groom"
+    id="date"
+    imgUrl="{PUBLIC_S3_URL}/location.webp"
+    imgAlt="date"
   >
-    <div class="flex flex-col text-right items-end p-2 w-full justify-end gap-2 mt-auto">
-      <p class="font-playfair">THE GROOM</p>
-      <h3 class="text-2xl font-playfair border-t w-max pt-2">Fuad Mahmud I.</h3>
-      <i class="font-opensans">Putra ke 1 dari 4</i>
-      <p class="font-opensans text-sm font-light">Alm. Bapak Sunarto dan Ibu Puspita Sari</p>
-      <a
-        href="https://www.instagram.com/fuadmahmudi/"
-        referrerpolicy="no-referrer"
-        target="_blank"
-        rel="no-referrer"
-        class="backdrop-blur-xs bg-white/30 p-1 rounded-md w-max flex flex-row items-center">
-        <i class="fa-brands fa-instagram"></i>
-        <span class="pr-0.5 text-sm ml-0.5">@fuadmahmudi</span>
-      </a>
+    <div>
+      <div class="flex flex-col justify-start gap-4 mb-4">
+        <h2 class="text-2xl font-playfair">{formatDate(WEDDING_DATE)?.toUpperCase()}</h2>
+        <div class="h-px w-auto grow bg-white"></div>
+        <div class="font-playfair text-lg flex flex-col gap-1">
+          <p>AKAD NIKAH</p>
+          <p>16.00 WIB</p>
+          <p>GOR MATRAMAN</p>
+          <p class="font-opensans font-light text-sm">
+            Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120
+          </p>
+        </div>
+        <div class="h-px w-auto grow bg-white"></div>
+        <div class="font-playfair text-lg flex flex-col gap-1">
+          <p>RESEPSI</p>
+          <p>19.00 - 21.00 WIB</p>
+          <p>GOR MATRAMAN</p>
+          <p class="font-opensans font-light text-sm">
+            Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120
+          </p>
+          <a
+            href="https://maps.app.goo.gl/hrQ8rohJTUW7kLoW9"
+            referrerpolicy="no-referrer"
+            target="_blank"
+            rel="no-referrer"
+            class="mt-4 text-sm text-center bg-olive-300 p-3 rounded-sm text-stone-500"
+          >
+            LIHAT LOKASI
+          </a>
+        </div>
+      </div>
+      <Counter />
     </div>
   </Section>
 
@@ -138,8 +180,9 @@ onDestroy(() => {
     id="journey"
     imgUrl="{PUBLIC_S3_URL}/journey.webp"
     imgAlt="journey"
+    textContainerClass="p-8"
   >
-    <div class="flex flex-col text-left h-full gap-4 my-auto">
+    <div class="flex flex-col text-left h-full justify-center gap-4 my-auto">
       <h2 class="text-2xl font-playfair text-center">OUR JOURNEY</h2>
       <div class="journey-text font-light font-opensans text-[3vw] md:text-base">
         Terkadang, dua orang yang sudah begitu dekat jaraknya, justru dipertemukan pada waktu yang paling tepat.
@@ -169,48 +212,7 @@ onDestroy(() => {
         Akan menjadi awal dari selamanya langkah baru sebagai dua hati yang dipersatukan dalam satu ikatan suci. 
       </div>
     </div>
-  </Section> 
-
-  <Section
-    id="date"
-    imgUrl="{PUBLIC_S3_URL}/location.webp"
-    imgAlt="date"
-  >
-    <div>
-      <div class="flex flex-col justify-start gap-4 mb-4">
-        <h2 class="text-2xl font-playfair">{formatDate(WEDDING_DATE)?.toUpperCase()}</h2>
-        <div class="h-px w-auto grow bg-white"></div>
-        <div class="font-playfair text-lg flex flex-col gap-1">
-          <p>AKAD NIKAH</p>
-          <p>16.00</p>
-          <p>GOR MATRAMAN</p>
-          <p class="font-opensans font-light text-sm">
-            Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120
-          </p>
-        </div>
-        <div class="h-px w-auto grow bg-white"></div>
-        <div class="font-playfair text-lg flex flex-col gap-1">
-          <p>RESEPSI</p>
-          <p>19.00</p>
-          <p>GOR MATRAMAN</p>
-          <p class="font-opensans font-light text-sm">
-            Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120
-          </p>
-          <a
-            href="https://maps.app.goo.gl/hrQ8rohJTUW7kLoW9"
-            referrerpolicy="no-referrer"
-            target="_blank"
-            rel="no-referrer"
-            class="mt-4 text-sm text-center bg-olive-300 p-3 rounded-sm text-stone-500"
-          >
-            LIHAT LOKASI
-          </a>
-        </div>
-      </div>
-      <Counter />
-    </div>
   </Section>
-
 
   <Section
     id="gift"
@@ -261,10 +263,28 @@ onDestroy(() => {
       <h4 class="text-2xl font-dancing tracking-wider">FUAD & ANGGITA</h4>
     </div>
   </Section>
+  
+  <button
+    class="fixed right-4 top-1/12 z-30 backdrop-blur-xs bg-white/30 text-white p-4 h-6 w-6 rounded-full flex items-center justify-center"
+    type="button"
+    title="Pause music"
+    onclick={handleMusic}
+  >
+    {#if isAudioPlay}
+      <i class="fa-solid fa-pause"></i>
+    {:else}
+      <i class="fa-solid fa-play"></i>
+    {/if}
+  </button>
+
+  <audio bind:this={audioEl} loop>
+    <source src="{PUBLIC_S3_URL}/bg-music.mp3" type="audio/mp3" />
+  </audio>
 </div>
 
 <style lang="scss">
   .parent {
+    position: relative;
     scrollbar-width: none;
     ::-webkit-scrollbar {
       display: none;

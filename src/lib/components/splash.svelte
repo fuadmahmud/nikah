@@ -8,12 +8,13 @@ interface SplashProps {
 }
 
 const { onOpen }: SplashProps = $props();
-const monthAndDate = `${WEDDING_DATE.getMonth().toString().padStart(2, "0")}/${WEDDING_DATE.getDate()}`;
+const month = WEDDING_DATE.getMonth() + 1;
+const monthAndDate = `${WEDDING_DATE.getDate()}/${month.toString().padStart(2, "0")}`;
 const year = WEDDING_DATE.getFullYear();
 </script>
 
 
-<div class="w-dvw h-dvh flex" transition:blur={{ duration: 750, delay: 150, opacity: 80  }}>
+<div class="w-dvw h-dvh flex" transition:blur={{ duration: 750, delay: 150, opacity: 50  }}>
   <img
     src="{PUBLIC_S3_URL}/message.webp"
     alt="background-welcome"
@@ -28,7 +29,7 @@ const year = WEDDING_DATE.getFullYear();
         <p>{year}</p>
       </div>
       <p class="font-light tracking-wide text-xs font-playfair text-white/90">WE INVITE YOU TO CELEBRATE</p>
-      <h5 class="text-2xl font-playfair font-light tracking-widest">FUAD & ANGGITA</h5>
+      <h5 class="text-2xl font-playfair font-light tracking-widest">ANGGITA & FUAD</h5>
     </div>
     <div class="flex flex-col justify-self-end text-center pb-12">
       <p class="font-playfair tracking-widest">Kepada Yth.</p>
