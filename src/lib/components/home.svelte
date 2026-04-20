@@ -1,16 +1,15 @@
 <script lang="ts">
 import Section from "./section.svelte";
-import formatDate from "$lib/utils/formatDate";
-import { WEDDING_DATE } from "../../constants";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { onDestroy, onMount } from "svelte";
 import Slider from "./slider.svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
-import Counter from "./counter.svelte";
 import Person from "./person.svelte";
 import { blur } from "svelte/transition";
+import Gallery from "./gallery.svelte";
+import Location from "./location.svelte";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -56,7 +55,7 @@ onMount(async () => {
 					},
 					opacity: 0,
 					autoAlpha: 0,
-					stagger: 0.05,
+					stagger: 0.1,
 					duration: 3,
 				});
 			},
@@ -120,7 +119,7 @@ function handleVisibilityChange() {
     role="bride"
     imgEndpoint="bride.webp"
     name="Anggita Kusuma Putri"
-    child="Putri ke 3"
+    child="Putri terakhir"
     parent="Bapak Anwar Kusni dan Ibu Sri Suripni"
     social="@anggitaaksm_"
     position="left"
@@ -130,51 +129,13 @@ function handleVisibilityChange() {
     role="groom"
     imgEndpoint="groom.webp"
     name="Fuad Mahmud Ibrahim"
-    child="Putra ke 1"
-    parent="Alm. H. Sunarto dan Ibu Hj. Puspita Sari"
+    child="Putra pertama"
+    parent="Alm. H. Sunarto dan Hj. Puspita Sari"
     social="@fuadmahmudi"
     position="right"
   />
 
-  <Section
-    id="date"
-    imgUrl="{PUBLIC_S3_URL}/location.webp"
-    imgAlt="date"
-  >
-    <div>
-      <div class="flex flex-col justify-start gap-4 mb-4">
-        <h2 class="text-2xl font-playfair">{formatDate(WEDDING_DATE)?.toUpperCase()}</h2>
-        <div class="h-px w-auto grow bg-white"></div>
-        <div class="font-playfair text-lg flex flex-col gap-1">
-          <p>AKAD NIKAH</p>
-          <p>16.00 WIB</p>
-          <p>GOR MATRAMAN</p>
-          <p class="font-opensans font-light text-sm">
-            Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120
-          </p>
-        </div>
-        <div class="h-px w-auto grow bg-white"></div>
-        <div class="font-playfair text-lg flex flex-col gap-1">
-          <p>RESEPSI</p>
-          <p>19.00 - 21.00 WIB</p>
-          <p>GOR MATRAMAN</p>
-          <p class="font-opensans font-light text-sm">
-            Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120
-          </p>
-          <a
-            href="https://maps.app.goo.gl/hrQ8rohJTUW7kLoW9"
-            referrerpolicy="no-referrer"
-            target="_blank"
-            rel="no-referrer"
-            class="mt-4 text-sm text-center bg-olive-300 p-3 rounded-sm text-stone-500"
-          >
-            LIHAT LOKASI
-          </a>
-        </div>
-      </div>
-      <Counter />
-    </div>
-  </Section>
+  <Location />
 
   <Section
     id="journey"
@@ -214,6 +175,8 @@ function handleVisibilityChange() {
     </div>
   </Section>
 
+  <Gallery />
+
   <Section
     id="gift"
     imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
@@ -232,17 +195,6 @@ function handleVisibilityChange() {
   >
     <div class="flex flex-col text-left h-full gap-4">
       <h2 class="text-2xl font-playfair">UCAPAN DAN DOA</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia eius ipsam animi! Dolorem, soluta officiis. Ipsam quidem ratione odio neque, rerum quam odit asperiores praesentium dolore soluta, iusto provident ad.</p>
-    </div>
-  </Section>
-
-  <Section
-    id="wishes"
-    imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
-    imgAlt="wishes"
-  >
-    <div class="flex flex-col text-left h-full gap-4">
-      <h2 class="text-2xl font-playfair">GALERI</h2>
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia eius ipsam animi! Dolorem, soluta officiis. Ipsam quidem ratione odio neque, rerum quam odit asperiores praesentium dolore soluta, iusto provident ad.</p>
     </div>
   </Section>
@@ -278,7 +230,7 @@ function handleVisibilityChange() {
   </button>
 
   <audio bind:this={audioEl} loop>
-    <source src="{PUBLIC_S3_URL}/bg-music.mp3" type="audio/mp3" />
+    <source src="{PUBLIC_S3_URL}/bg-music-2.mp3" type="audio/mp3" />
   </audio>
 </div>
 
