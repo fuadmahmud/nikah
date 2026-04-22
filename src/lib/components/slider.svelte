@@ -1,7 +1,11 @@
 <script lang="ts">
-import { onMount, onDestroy } from "svelte";
+import { onMount, onDestroy, type Snippet } from "svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
 import { gsap } from "gsap";
+
+interface SliderProps {
+	children: Snippet<[]>;
+}
 
 const slides = [
 	`${PUBLIC_S3_URL}/slider-1.webp`,
@@ -14,6 +18,7 @@ const TRANSITION = 1.3;
 let gsapCtx: gsap.Context;
 let current = $state(0);
 let slidesTL: gsap.core.Timeline;
+const { children }: SliderProps = $props();
 
 const slideEls: HTMLElement[] = $state([]);
 
@@ -131,14 +136,7 @@ onDestroy(() => {
       </div>
     {/each}
     <div class="z-10 absolute inset-0 h-full w-full flex flex-col text-olive-200 p-12 items-center-safe bg-black/20">
-      <div class="flex flex-col gap-2 text-center items-center justify-center">
-        <p class="font-playfair text-xl mb-4">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-        <p class="font-light tracking-wide text-xs">THE WEDDING OF</p>
-				<h5 class="text-2xl font-playfair font-light tracking-wider">ANGGITA & FUAD</h5>	
-      </div>
-      <div class="arrow border rounded-full border-olive-300 h-10 w-10 p-2 relative mt-2 flex items-center justify-center">
-        <i class="fa-solid fa-angle-down font-light -mt-1"></i>
-      </div>
+      {@render children()}
     </div>
   </div>
 </div>

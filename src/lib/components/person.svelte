@@ -78,7 +78,7 @@ onDestroy(() => {
   imgAlt={role}
 >
   <div bind:this={wrapperEl} class={classes}>
-    <p class="person-anim-text overflow-hidden font-playfair uppercase">THE {role}</p>
+    <p class="person-anim-text overflow-hidden font-playfair uppercase text-sm">THE {role}</p>
     <h3 class="person-anim-text overflow-hidden text-2xl font-playfair border-t pt-1 w-max">{name}</h3>
     <i class="person-anim-text overflow-hidden font-opensans text-sm font-light">{child}</i>
     <p class="person-anim-text overflow-hidden font-opensans text-sm font-light">{parent}</p>

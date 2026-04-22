@@ -1,4 +1,6 @@
-export function clsx(...args: string[]) {
+import { twMerge } from "tailwind-merge";
+
+function clsx(...args: string[]) {
 	let str = "";
 	const len = args.length;
 	for (let i = 0; i < len; i++) {
@@ -12,4 +14,8 @@ export function clsx(...args: string[]) {
 	return str;
 }
 
-export default clsx;
+function merge(...args: string[]) {
+	return twMerge(clsx(...args));
+}
+
+export default merge;

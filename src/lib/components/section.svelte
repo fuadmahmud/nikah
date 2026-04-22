@@ -9,7 +9,7 @@ interface SectionProps {
 	classNames?: string;
 	textContainerClass?: string;
 	imgLoading?: "lazy" | "eager";
-	imgFetchPriority?: "high" | "low";
+	imgFetchPriority?: "high" | "low" | "auto";
 }
 
 const {
@@ -17,20 +17,17 @@ const {
 	imgUrl,
 	imgAlt,
 	imgLoading = "lazy",
-	imgFetchPriority = "high",
+	imgFetchPriority = "auto",
 	classNames,
 	textContainerClass,
 	children,
 }: SectionProps = $props();
 const classes = $derived(
-	clsx(
-		"h-dvh w-full relative snap-start flex flex-col overflow-hidden",
-		classNames ?? "",
-	),
+	clsx("min-h-dvh w-full relative snap-start flex flex-col", classNames ?? ""),
 );
 const textContainerClasses = $derived(
 	clsx(
-		"w-full h-full inset-0 z-10 text-olive-200 absolute flex flex-col bg-black/35 p-4",
+		"w-full min-h-full inset-0 z-10 text-olive-200 absolute flex flex-col bg-black/35 p-8",
 		textContainerClass ?? "",
 	),
 );
@@ -51,11 +48,11 @@ const textContainerClasses = $derived(
 		></div>
 	</div>
 
-	<div class="relative h-full w-full overflow-hidden lg:mx-auto lg:max-w-160">
+	<div class="relative h-dvh w-full lg:mx-auto lg:max-w-160">
 		<img
 			src={imgUrl}
 			alt={imgAlt}
-			class="w-full h-full object-cover"
+			class="w-full h-full object-cover will-change-transform"
 			loading={imgLoading}
 			fetchpriority={imgFetchPriority}
 		>

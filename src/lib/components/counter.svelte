@@ -1,34 +1,34 @@
 <script lang="ts">
-  import { WEDDING_DATE } from "../../constants";
+import { WEDDING_DATE } from "../../constants";
 
-  const TIME_LABEL = ["days", "hours", "minutes", "seconds"];
-  const INTERVAL = 1000;
-  let timer = $state(getTimer(WEDDING_DATE));
+const TIME_LABEL = ["days", "hours", "minutes", "seconds"];
+const INTERVAL = 1000;
+let timer = $state(getTimer(WEDDING_DATE));
 
-  function getTimer(date: Date): string {
-    const now = Date.now();
-    const remaining = Math.max(0, date.getTime() - now);
-    const pad = (n: number) => String(n).padStart(2, "0");
+function getTimer(date: Date): string {
+	const now = Date.now();
+	const remaining = Math.max(0, date.getTime() - now);
+	const pad = (n: number) => String(n).padStart(2, "0");
 
-    const seconds = Math.floor(remaining / 1000) % 60;
-    const minutes = Math.floor(remaining / (1000 * 60)) % 60;
-    const hours = Math.floor(remaining / (1000 * 60 * 60)) % 24;
-    const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+	const seconds = Math.floor(remaining / 1000) % 60;
+	const minutes = Math.floor(remaining / (1000 * 60)) % 60;
+	const hours = Math.floor(remaining / (1000 * 60 * 60)) % 24;
+	const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
 
-    return `${pad(days)} ${pad(hours)} ${pad(minutes)} ${pad(seconds)}`;
-  }
+	return `${pad(days)} ${pad(hours)} ${pad(minutes)} ${pad(seconds)}`;
+}
 
-  $effect(() => {
-    const intervalId = setInterval(() => {
-      timer = getTimer(WEDDING_DATE);
-    }, INTERVAL);
+$effect(() => {
+	const intervalId = setInterval(() => {
+		timer = getTimer(WEDDING_DATE);
+	}, INTERVAL);
 
-    return () => clearInterval(intervalId);
-  });
+	return () => clearInterval(intervalId);
+});
 </script>
 
 
-<div class="flex flex-col justify-start gap-2 my-auto font-playfair">
+<div class="flex flex-col justify-start gap-2 font-playfair my-auto">
   <h2 class="text-xl font-playfair text-center">COUNT THE DATE</h2>
   <div class="flex flex-row items-center w-full justify-evenly font-light">
     {#each timer.split(" ") as time, i (i)}
