@@ -11,6 +11,7 @@ import { blur } from "svelte/transition";
 import Gallery from "./gallery.svelte";
 import Location from "./location.svelte";
 import Gift from "./gift.svelte";
+import Wishes from "./wishes.svelte";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -99,7 +100,10 @@ function handleVisibilityChange() {
 }
 </script>
 
-<div class="h-dvh overflow-y-scroll snap-y snap-mandatory parent font-opensans" in:blur={{ duration: 900, delay: 1100, opacity: 80 }}>
+<div
+  class="h-dvh w-dvw overflow-x-hidden overflow-y-scroll snap-y snap-mandatory parent font-opensans"
+  in:blur={{ duration: 900, delay: 1100, opacity: 80 }}
+>
   <!-- Opening Section -->
   <Slider>
     <div class="flex flex-col gap-2 text-center items-center justify-center">
@@ -116,8 +120,6 @@ function handleVisibilityChange() {
     id="surah"
     imgUrl="{PUBLIC_S3_URL}/seating.webp"
     imgAlt="surah"
-    imgLoading="eager"
-    imgFetchPriority="low"
   >
     <div class="text-left h-max overflow-hidden rounded-md p-2 mt-[25%]">
       <div class="surah-text flex flex-col justify-end gap-4">
@@ -189,16 +191,7 @@ function handleVisibilityChange() {
 
   <Gallery />
 
-  <Section
-    id="wishes"
-    imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
-    imgAlt="wishes"
-  >
-    <div class="flex flex-col text-left h-full gap-4">
-      <h2 class="text-2xl font-playfair">UCAPAN DAN DOA</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia eius ipsam animi! Dolorem, soluta officiis. Ipsam quidem ratione odio neque, rerum quam odit asperiores praesentium dolore soluta, iusto provident ad.</p>
-    </div>
-  </Section>
+  <Wishes />
 
   <Gift />
 
@@ -220,7 +213,7 @@ function handleVisibilityChange() {
   </Section>
   
   <button
-    class="fixed right-4 top-1/12 z-30 backdrop-blur-xs bg-white/30 text-slate-300 p-4 h-6 w-6 rounded-full flex items-center justify-center"
+    class="fixed right-4 top-1/12 z-30 backdrop-blur-xs bg-white/30 text-olive-300 p-4 h-6 w-6 rounded-full flex items-center justify-center"
     type="button"
     title="Pause music"
     onclick={handleMusic}
@@ -232,7 +225,7 @@ function handleVisibilityChange() {
     {/if}
   </button>
 
-  <audio bind:this={audioEl} loop>
+  <audio bind:this={audioEl} loop class="hidden">
     <source src="{PUBLIC_S3_URL}/bg-music.mp3" type="audio/mp3" />
   </audio>
 </div>
@@ -240,9 +233,5 @@ function handleVisibilityChange() {
 <style lang="scss">
   .parent {
     position: relative;
-    scrollbar-width: none;
-    ::-webkit-scrollbar {
-      display: none;
-    }
   }
 </style>

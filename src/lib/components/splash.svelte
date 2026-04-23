@@ -28,13 +28,13 @@ const year = WEDDING_DATE.getFullYear();
         <p>{monthAndDate}</p>
         <p>{year}</p>
       </div>
-      <p class="font-light tracking-wide text-xs font-playfair text-slate-300/90">WE INVITE YOU TO CELEBRATE</p>
+      <p class="font-light tracking-wide text-xs font-playfair text-olive-300/90">WE INVITE YOU TO CELEBRATE</p>
       <h5 class="text-2xl font-playfair font-light tracking-widest">ANGGITA & FUAD</h5>
     </div>
     <div class="flex flex-col justify-self-end text-center pb-12">
       <p class="font-playfair tracking-widest">Kepada Yth.</p>
       <p>Bapak & Ibu Test</p>
-      <button class="mt-4 text-sm backdrop-blur-xs bg-white/30 p-3 rounded-sm text-slate-300 lg:w-1/2 mx-auto cursor-pointer" type="button" onclick={onOpen} id="btn-open">
+      <button class="mt-4 text-sm backdrop-blur-xs bg-white/30 p-3 rounded-sm text-olive-300 lg:w-1/2 mx-auto cursor-pointer" type="button" onclick={onOpen} id="btn-open">
         <i class="fa-regular fa-envelope-open mr-1"></i>
         OPEN INVITATION
       </button>

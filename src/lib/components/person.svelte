@@ -19,8 +19,8 @@ const { imgEndpoint, role, name, child, parent, social, position }: Person =
 	$props();
 const classes = $derived(
 	position === "left"
-		? "flex flex-col gap-2 justify-end text-left mt-auto person-wrapper"
-		: "flex flex-col gap-2 justify-end text-right items-end p-2 w-full mt-auto person-wrapper",
+		? "flex flex-col gap-2 justify-end text-left person-wrapper"
+		: "flex flex-col gap-2 justify-end text-right items-end p-2 w-full person-wrapper",
 );
 
 let socialEl: HTMLAnchorElement;
@@ -76,6 +76,7 @@ onDestroy(() => {
   id={role}
   imgUrl="{PUBLIC_S3_URL}/{imgEndpoint}"
   imgAlt={role}
+	textContainerClass="mt-auto"
 >
   <div bind:this={wrapperEl} class={classes}>
     <p class="person-anim-text overflow-hidden font-playfair uppercase text-sm">THE {role}</p>

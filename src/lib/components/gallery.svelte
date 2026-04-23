@@ -1,7 +1,5 @@
 <script lang="ts">
 import { PUBLIC_S3_URL } from "$env/static/public";
-import gsap from "gsap";
-import { onDestroy, onMount } from "svelte";
 import Section from "./section.svelte";
 
 const photos = {
@@ -10,16 +8,14 @@ const photos = {
 	photo3: `${PUBLIC_S3_URL}/journey.webp`,
 	photo4: `${PUBLIC_S3_URL}/closing.webp`,
 };
-
 </script>
 <Section
   id="gallery"
   imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
   imgAlt="gallery"
-  textContainerClass="bg-black/50 h-max"
-  classNames="h-auto"
+  textContainerClass="bg-black/50"
 >
-  <div class="flex flex-col text-left gap-4 h-max">
+  <div class="flex flex-col text-left gap-4">
     <h2 class="text-2xl font-playfair text-center">GALERI</h2>
     <div class="gallery-grid w-full scroll-none">
       <img src={photos.photo1} alt="Gallery 1" class="tile tile-photo-1" loading="lazy" />
@@ -41,7 +37,7 @@ const photos = {
   .gallery-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(5, minmax(100px, 22vw));
+    grid-template-rows: repeat(auto, minmax(100px, 22vw));
     gap: 0.75rem;
   }
 

@@ -91,7 +91,7 @@ onDestroy(() => {
           referrerpolicy="no-referrer"
           target="_blank"
           rel="no-referrer"
-          class="mt-4 text-sm text-center backdrop-blur-xs bg-white/30 p-3 rounded-sm text-slate-300"
+          class="mt-4 text-sm text-center backdrop-blur-xs bg-white/30 p-3 rounded-sm text-olive-300"
         >
           LIHAT LOKASI
         </a>

@@ -12,28 +12,20 @@ interface SectionProps {
 	imgFetchPriority?: "high" | "low" | "auto";
 }
 
-const {
-	id,
-	imgUrl,
-	imgAlt,
-	imgLoading = "lazy",
-	imgFetchPriority = "auto",
-	classNames,
-	textContainerClass,
-	children,
-}: SectionProps = $props();
-const classes = $derived(
-	clsx("min-h-dvh w-full relative snap-start flex flex-col", classNames ?? ""),
+const { id, imgUrl, classNames, textContainerClass, children }: SectionProps =
+	$props();
+const rootClass = $derived(
+	clsx("w-full relative snap-start flex flex-col", classNames ?? ""),
 );
-const textContainerClasses = $derived(
+const contentClass = $derived(
 	clsx(
-		"w-full min-h-full inset-0 z-10 text-olive-200 absolute flex flex-col bg-black/35 p-8",
+		"relative w-full text-olive-200 flex flex-col p-8",
 		textContainerClass ?? "",
 	),
 );
 </script>
 
-<section class={classes} id={id}>
+<section class={rootClass} id={id}>
 	<div class="absolute inset-0 hidden lg:grid lg:grid-cols-[1fr_minmax(0,40rem)_1fr]">
 		<div
 			class="bg-cover bg-center blur-xl scale-110 opacity-50"
@@ -48,15 +40,12 @@ const textContainerClasses = $derived(
 		></div>
 	</div>
 
-	<div class="relative h-dvh w-full lg:mx-auto lg:max-w-160">
-		<img
-			src={imgUrl}
-			alt={imgAlt}
-			class="w-full h-full object-cover will-change-transform"
-			loading={imgLoading}
-			fetchpriority={imgFetchPriority}
-		>
-		<div class={textContainerClasses}>
+	<div
+		class="min-h-dvh relative w-full lg:mx-auto lg:max-w-160 bg-cover bg-center bg-no-repeat will-change-transform flex flex-col"
+		style="background-image: url('{imgUrl}');"
+	>
+		<div class="bg-black/50 h-full w-full absolute inset-0"></div>
+		<div class={contentClass}>
 			{@render children()}
 		</div>
 	</div>

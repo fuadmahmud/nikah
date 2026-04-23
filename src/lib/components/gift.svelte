@@ -42,7 +42,7 @@ async function copyText() {
         {/each}
       </select>
       <button
-        class="text-sm backdrop-blur-xs bg-white/30 p-3 rounded-sm text-slate-300 lg:w-1/2 cursor-pointer"
+        class="text-sm backdrop-blur-xs bg-white/30 p-3 rounded-sm text-olive-300 lg:w-1/2 cursor-pointer"
         type="button"
         onclick={copyText}
       >
