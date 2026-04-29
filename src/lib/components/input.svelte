@@ -51,11 +51,11 @@ function handleInput() {
 function activate() {
 	gsap.to(spanEl, {
 		x: -12,
-		y: textarea ? -48 : -32,
+		y: textarea ? -44 : -32,
 		opacity: 1,
 		fontSize: "0.75em",
 		cursor: "default",
-		duration: 0.5,
+		duration: 1,
 		ease: "power1.inOut",
 	});
 }
@@ -68,7 +68,7 @@ function deactivate() {
 			opacity: 0.6,
 			fontSize: "1em",
 			cursor: "text",
-			duration: 0.5,
+			duration: 1,
 			ease: "power1.inOut",
 		});
 	}

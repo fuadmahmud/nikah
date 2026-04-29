@@ -21,19 +21,11 @@ const photos = {
       <img src={photos.photo1} alt="Gallery 1" class="tile tile-photo-1" loading="lazy" />
       <img src={photos.photo2} alt="Gallery 2" class="tile tile-photo-2" loading="lazy" />
       <img src={photos.photo3} alt="Gallery 3" class="tile tile-photo-3" loading="lazy" />
-      <img src={photos.photo4} alt="Gallery 4" class="tile tile-photo-4" loading="lazy" />
     </div>
   </div>
 </Section>
 
 <style lang="scss">
-  .scroll-none {
-    scrollbar-width: none;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
   .gallery-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -61,10 +53,5 @@ const photos = {
   .tile-photo-3 {
     grid-column: 2;
     grid-row: 1 / span 2;
-  }
-
-  .tile-photo-4 {
-    grid-column: 1 / span 2;
-    grid-row: 4 / span 2;
   }
 </style>

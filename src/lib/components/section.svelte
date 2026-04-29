@@ -19,7 +19,7 @@ const rootClass = $derived(
 );
 const contentClass = $derived(
 	clsx(
-		"relative w-full text-olive-200 flex flex-col p-8",
+		"relative w-full text-olive-300 flex flex-col p-8",
 		textContainerClass ?? "",
 	),
 );

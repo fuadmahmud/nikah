@@ -9,3 +9,10 @@
 	--font-playfair: "Noto Serif", serif;
 	--color-backdrop: oklch(0.1448 0 0);
 }
+
+.scroll-none {
+	scrollbar-width: none;
+	::-webkit-scrollbar {
+		display: none;
+	}
+}

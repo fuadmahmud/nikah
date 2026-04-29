@@ -135,7 +135,7 @@ onDestroy(() => {
         ></div>
       </div>
     {/each}
-    <div class="z-10 absolute inset-0 h-full w-full flex flex-col text-olive-200 p-12 items-center-safe bg-black/20">
+    <div class="z-10 absolute inset-0 h-full w-full flex flex-col text-olive-300 p-12 items-center-safe bg-black/20">
       {@render children()}
     </div>
   </div>

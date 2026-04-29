@@ -1,17 +1,17 @@
 <script lang="ts">
-import Section from "./section.svelte";
+import Section from "../components/section.svelte";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { onDestroy, onMount } from "svelte";
-import Slider from "./slider.svelte";
+import Slider from "../components/slider.svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
-import Person from "./person.svelte";
+import Person from "../components/person.svelte";
 import { blur } from "svelte/transition";
-import Gallery from "./gallery.svelte";
-import Location from "./location.svelte";
-import Gift from "./gift.svelte";
-import Wishes from "./wishes.svelte";
+import Gallery from "../components/gallery.svelte";
+import Location from "../components/location.svelte";
+import Gift from "../components/gift.svelte";
+import Wishes from "../components/wish-form.svelte";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -101,7 +101,7 @@ function handleVisibilityChange() {
 </script>
 
 <div
-  class="h-dvh w-dvw overflow-x-hidden overflow-y-scroll snap-y snap-mandatory parent font-opensans"
+  class="h-dvh w-dvw overflow-x-hidden overflow-y-scroll snap-y snap-mandatory parent font-opensans scroll-none"
   in:blur={{ duration: 900, delay: 1100, opacity: 80 }}
 >
   <!-- Opening Section -->
