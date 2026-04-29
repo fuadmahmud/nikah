@@ -49,7 +49,7 @@ export const actions = {
 		const name = formData.get("name") as string;
 		try {
 			if (!slug) {
-				return db.insert(schema.wish).values({
+				return await db.insert(schema.wish).values({
 					name,
 					description: formData.get("wishes") as string,
 					rsvp: formData.get("rsvp") === "true",
@@ -62,7 +62,7 @@ export const actions = {
 				where: (guests, { eq }) => eq(guests.slug, slug),
 			});
 
-			return db.insert(schema.wish).values({
+			return await db.insert(schema.wish).values({
 				name,
 				description: formData.get("wishes") as string,
 				rsvp: formData.get("rsvp") === "true",
