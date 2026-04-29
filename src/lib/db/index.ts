@@ -3,8 +3,14 @@ import postgres from "postgres";
 import * as schema from "./schema";
 import { DATABASE_URL } from "$env/static/private";
 
-const client = postgres(DATABASE_URL, {
-	max: 1,
-	prepare: false,
-});
-export const db = drizzle(client, { schema });
+export const createDb = () => {
+	const client = postgres(DATABASE_URL, {
+		max: 1,
+		prepare: false,
+	});
+
+	return {
+		db: drizzle(client, { schema }),
+		client,
+	};
+};
