@@ -3,19 +3,9 @@
 declare global {
 	namespace App {
 		// interface Error {}
+		// interface Locals {}
+		// interface PageData {}
 		// interface PageState {}
-		interface Locals {
-			supabase: SupabaseClient<Database>;
-			safeGetSession: () => Promise<{
-				session: Session | null;
-				user: User | null;
-			}>;
-			session: Session | null;
-			user: User | null;
-		}
-		interface PageData {
-			session: Session | null;
-		}
 		interface Platform {
 			env: { COUNTER: DurableObjectNamespace };
 			context: { waitUntil(promise: Promise<any>): void };
