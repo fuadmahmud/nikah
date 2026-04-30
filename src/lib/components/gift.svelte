@@ -214,8 +214,8 @@ async function handleSwap() {
   <div class="rounded-sm p-4 flex flex-col text-left justify-center gap-4 text-olive-300">
     <h2 class="text-2xl font-playfair">WEDDING GIFT</h2>
     <p class="font-opensans font-light text-sm">
-      Tanpa mengurangi rasa hormat kami bagi tamu yang ingin mengirimkan hadiah kepada kedua&nbsp;
-      mempelai, silahkan klik di bawah ini:
+      Tanpa mengurangi rasa hormat kami bagi tamu yang ingin mengirimkan hadiah kepada kedua
+      mempelai, silahkan klik pada kartu di bawah ini:
     </p>
     <div class="relative">
 			{#each GIFT_ACCOUNTS as account, index (index)}

@@ -85,7 +85,7 @@ const handleSearchGif = debounce(async (q: string) => {
 >
   <div class="flex flex-col text-left h-full gap-4">
     <h2 class="text-2xl font-playfair text-center">UCAPAN DAN DOA</h2>
-    <p class="font-playfair font-light text-sm">Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
+    <p class="font-opensans font-light text-sm">Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
         Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
         kehadiran dan doa restunya, kami mengucapkan terima kasih.
     </p>

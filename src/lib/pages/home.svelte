@@ -202,6 +202,7 @@ function handleVisibilityChange() {
   >
     <div class="flex flex-col text-center h-full justify-center gap-4 text-shadow-lg">
       <h2 class="text-2xl font-light font-playfair">UCAPAN TERIMA KASIH</h2>
+      <p class="text-sm font-light">Kami mohon maaf apabila ada salah dalam penyebutan nama ataupun gelar.</p>
       <p class="text-sm font-light">
         Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
         Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
