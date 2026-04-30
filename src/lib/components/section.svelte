@@ -1,8 +1,8 @@
 <script lang="ts">
 import clsx from "$lib/utils/clsx";
 import type { Snippet } from "svelte";
-interface SectionProps {
-	id: string;
+import type { HTMLAttributes } from "svelte/elements";
+interface SectionProps extends HTMLAttributes<HTMLElement> {
 	imgUrl: string;
 	imgAlt: string;
 	children: Snippet<[]>;
@@ -12,8 +12,14 @@ interface SectionProps {
 	imgFetchPriority?: "high" | "low" | "auto";
 }
 
-const { id, imgUrl, classNames, textContainerClass, children }: SectionProps =
-	$props();
+const {
+	id,
+	imgUrl,
+	classNames,
+	textContainerClass,
+	children,
+	...props
+}: SectionProps = $props();
 const rootClass = $derived(
 	clsx("w-full relative snap-start flex flex-col", classNames ?? ""),
 );
@@ -25,7 +31,7 @@ const contentClass = $derived(
 );
 </script>
 
-<section class={rootClass} id={id}>
+<section class={rootClass} id={id} {...props}>
 	<div class="absolute inset-0 hidden lg:grid lg:grid-cols-[1fr_minmax(0,40rem)_1fr]">
 		<div
 			class="bg-cover bg-center blur-xl scale-110 opacity-50"
