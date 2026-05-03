@@ -24,7 +24,7 @@ setContext("guest", () => data.guest);
 	<title>The Wedding of Fuad & Anggita</title>
 	<meta name="description" content="The Wedding Invitation of Anggita & Fuad">
 	<meta property="og:title" content="The Wedding of Anggita & Fuad">
-	<meta property="og:description" content="Dear, {guest?.salutation ? `${guest.salutation} ` : ''}{guest?.name || 'invitee'} we happily invited you to celebrate our wedding">
+	<meta property="og:description" content="Dear, {guest?.salutation ? `${guest.salutation} ` : ''}{guest?.name || 'invitee'} we happily invite you to celebrate our wedding">
 	<meta property="og:url" content="https://menikah.fuadmahmud.dev">
 	<meta property="og:image" content="https://menikah.fuadmahmud.dev/og-image.jpg">
 	<meta property="og:image:height" content="1200">
