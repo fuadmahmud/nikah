@@ -3,13 +3,15 @@ import { blur } from "svelte/transition";
 import { WEDDING_DATE } from "../../constants";
 import { PUBLIC_S3_URL } from "$env/static/public";
 import type { Guest } from "../../types";
+	import { getContext } from "svelte";
 
 interface SplashProps {
 	onOpen: () => void;
-	guest?: Guest;
 }
 
-const { onOpen, guest }: SplashProps = $props();
+const { onOpen }: SplashProps = $props();
+const ctx = getContext<() => Guest>("guest");
+const guest = ctx();
 const month = WEDDING_DATE.getMonth() + 1;
 const monthAndDate = `${WEDDING_DATE.getDate()}/${month.toString().padStart(2, "0")}`;
 const year = WEDDING_DATE.getFullYear();
@@ -24,13 +26,13 @@ const year = WEDDING_DATE.getFullYear();
     loading="eager"
     fetchpriority="high"
   >
-  <div class="w-full h-full z-10 absolute bg-backdrop/50 text-olive-300 flex flex-col justify-between p-12">
+  <div class="w-full h-full z-10 absolute bg-backdrop/50 text-white flex flex-col justify-between p-12">
     <div class="flex flex-col gap-2 text-center">
       <div class="flex justify-around items-center italic font-light">
         <p>{monthAndDate}</p>
         <p>{year}</p>
       </div>
-      <p class="font-light tracking-wide text-xs font-playfair text-olive-300/90">WE INVITE YOU TO CELEBRATE</p>
+      <p class="font-light tracking-wide text-xs font-playfair text-white/90">WE INVITE YOU TO CELEBRATE</p>
       <h5 class="text-2xl font-playfair font-light tracking-widest">ANGGITA & FUAD</h5>
     </div>
     <div class="flex flex-col justify-self-end text-center pb-12">
@@ -42,7 +44,7 @@ const year = WEDDING_DATE.getFullYear();
         {/if}
         <span>{guest?.name}</span>
       </p>
-      <button class="mt-4 text-sm backdrop-blur-xs bg-white/30 p-3 rounded-sm text-olive-300 lg:w-1/2 mx-auto cursor-pointer" type="button" onclick={onOpen} id="btn-open">
+      <button class="mt-4 text-sm backdrop-blur-xs bg-white/30 p-3 rounded-sm text-white lg:w-1/2 mx-auto cursor-pointer" type="button" onclick={onOpen} id="btn-open">
         <i class="fa-regular fa-envelope-open mr-1"></i>
         OPEN INVITATION
       </button>

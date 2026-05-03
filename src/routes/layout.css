@@ -10,6 +10,10 @@
 	--color-backdrop: oklch(0.1448 0 0);
 }
 
+@utility text-shadow-readable {
+	text-shadow: 0 1px 3px rgba(0,0,0,1), 0 0 15px rgba(0,0,0,0.85), 0 0 40px rgba(0,0,0,0.6);
+}
+
 .scroll-none {
 	scrollbar-width: none;
 	::-webkit-scrollbar {

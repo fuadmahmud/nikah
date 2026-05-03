@@ -5,9 +5,11 @@ import { gsap } from "gsap";
 
 interface SliderProps {
 	children: Snippet<[]>;
+	id?: string;
+	slides?: string[]
 }
 
-const slides = [
+const DEFAULT_SLIDES = [
 	`${PUBLIC_S3_URL}/slider-1.webp`,
 	`${PUBLIC_S3_URL}/slider-2.webp`,
 	`${PUBLIC_S3_URL}/slider-3.webp`,
@@ -18,7 +20,7 @@ const TRANSITION = 1.3;
 let gsapCtx: gsap.Context;
 let current = $state(0);
 let slidesTL: gsap.core.Timeline;
-const { children }: SliderProps = $props();
+const { children, id, slides = DEFAULT_SLIDES }: SliderProps = $props();
 
 const slideEls: HTMLElement[] = $state([]);
 
@@ -107,20 +109,18 @@ onDestroy(() => {
 </script>
 
 <!-- Slider root -->
-<div class="w-full h-dvh">
+<div class="w-full" id={id}>
   <div
     role="region"
     aria-label="Background image slider"
-    class="relative h-full w-full overflow-hidden bg-backdrop font-opensans cursor-default snap-start"
-    onmouseenter={stopAutoplay}
-    onmouseleave={startAutoplay}
+    class="relative min-h-dvh w-full bg-backdrop font-opensans cursor-default snap-start overflow-hidden"
   >
     <!-- Slides -->
     {#each slides as slide, i (slide)}
       <div
         bind:this={slideEls[i]}
         aria-hidden={i !== current}
-        class="absolute inset-0 overflow-hidden"
+        class="absolute inset-0"
       >
         <!-- Parallax bg — inset -8% gives room for the parallax shift -->
         <div
@@ -135,7 +135,7 @@ onDestroy(() => {
         ></div>
       </div>
     {/each}
-    <div class="z-10 absolute inset-0 h-full w-full flex flex-col text-olive-300 p-12 items-center-safe bg-black/20">
+    <div class="z-10 relative w-full flex flex-col text-white p-8 items-center-safe">
       {@render children()}
     </div>
   </div>

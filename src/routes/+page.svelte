@@ -4,18 +4,6 @@ import Home from "$lib/pages/home.svelte";
 import { setContext } from "svelte";
 
 let isSplashPage = $state(true);
-const { data } = $props();
-let wishes = $derived(data.wishes);
-
-setContext("wishes", {
-	get wishes() {
-		return wishes;
-	},
-	set wishes(wish) {
-		wishes = wish;
-	},
-});
-setContext("guest", () => data.guest);
 
 const handleOpen = () => {
 	isSplashPage = false;
@@ -24,7 +12,7 @@ const handleOpen = () => {
 
 
 {#if isSplashPage}
-  <Splash onOpen={handleOpen} guest={data.guest} />
+  <Splash onOpen={handleOpen} />
 {/if}
 {#if !isSplashPage}
   <Home />

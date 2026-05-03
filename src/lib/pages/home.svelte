@@ -11,7 +11,9 @@ import { blur } from "svelte/transition";
 import Gallery from "../components/gallery.svelte";
 import Location from "../components/location.svelte";
 import Gift from "../components/gift.svelte";
-import Wishes from "../components/wish-form.svelte";
+import Wishes from "../components/wishes.svelte";
+import WishForm from "../components/wish-form.svelte";
+import { WISH_SLIDER_IMAGES } from "../../constants";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -122,7 +124,7 @@ function handleVisibilityChange() {
     imgAlt="surah"
   >
     <div class="text-left h-max overflow-hidden rounded-md p-2 mt-[25%]">
-      <div class="surah-text flex flex-col justify-end gap-4">
+      <div class="surah-text flex flex-col justify-end gap-4 text-shadow-readable">
         <h2 class="text-2xl font-playfair tracking-wide">Q.S. AR-RUM: 21</h2>
         <p class="font-opensans font-light text-sm/5">Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
       </div>
@@ -191,7 +193,12 @@ function handleVisibilityChange() {
 
   <Gallery />
 
-  <Wishes />
+  <WishForm />
+
+  <Slider id="wishes" slides={WISH_SLIDER_IMAGES}>
+    <h2 class="text-2xl font-playfair font-light w-full border-b border-slate-300 pb-1 mb-2">Ucapan</h2>
+    <Wishes />
+  </Slider>
 
   <Gift />
 
@@ -200,21 +207,21 @@ function handleVisibilityChange() {
     imgUrl={`${PUBLIC_S3_URL}/closing.webp`}
     imgAlt="closing"
   >
-    <div class="flex flex-col text-center h-full justify-center gap-4 text-shadow-lg">
-      <h2 class="text-2xl font-light font-playfair">UCAPAN TERIMA KASIH</h2>
-      <p class="text-sm font-light">Kami mohon maaf apabila ada salah dalam penyebutan nama ataupun gelar.</p>
-      <p class="text-sm font-light">
+    <div class="flex flex-col text-center h-full justify-center gap-4 text-shadow-lg font-light">
+      <h2 class="text-2xl font-playfair">UCAPAN TERIMA KASIH</h2>
+      <p class="text-sm">Kami mohon maaf apabila ada salah dalam penyebutan nama ataupun gelar.</p>
+      <p class="text-sm">
         Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
         Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
         kehadiran dan doa restunya, kami mengucapkan terima kasih.
       </p>
       <p class="text-sm">Wassalamu'alaikum Wr. Wb.</p>
-      <h4 class="text-2xl font-dancing tracking-wider">FUAD & ANGGITA</h4>
+      <h4 class="text-2xl font-playfair tracking-wider">ANGGITA & FUAD</h4>
     </div>
   </Section>
   
   <button
-    class="fixed right-4 top-1/12 z-30 backdrop-blur-xs bg-white/30 text-olive-300 p-4 h-6 w-6 rounded-full flex items-center justify-center"
+    class="fixed right-4 top-1/12 z-30 backdrop-blur-xs bg-white/30 text-white p-4 h-6 w-6 rounded-full flex items-center justify-center"
     type="button"
     title="Pause music"
     onclick={handleMusic}

@@ -10,6 +10,7 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
 	textContainerClass?: string;
 	imgLoading?: "lazy" | "eager";
 	imgFetchPriority?: "high" | "low" | "auto";
+	overlayClass?: string;
 }
 
 const {
@@ -18,6 +19,7 @@ const {
 	classNames,
 	textContainerClass,
 	children,
+	overlayClass,
 	...props
 }: SectionProps = $props();
 const rootClass = $derived(
@@ -25,7 +27,7 @@ const rootClass = $derived(
 );
 const contentClass = $derived(
 	clsx(
-		"relative w-full text-olive-300 flex flex-col p-8",
+		"relative w-full text-white flex flex-col p-8",
 		textContainerClass ?? "",
 	),
 );
@@ -50,7 +52,10 @@ const contentClass = $derived(
 		class="min-h-dvh relative w-full lg:mx-auto lg:max-w-160 bg-cover bg-center bg-no-repeat will-change-transform flex flex-col"
 		style="background-image: url('{imgUrl}');"
 	>
-		<div class="bg-black/50 h-full w-full absolute inset-0"></div>
+		<div class={clsx(
+			"bg-black/30 h-full w-full absolute inset-0",
+			overlayClass || ''
+		)}></div>
 		<div class={contentClass}>
 			{@render children()}
 		</div>

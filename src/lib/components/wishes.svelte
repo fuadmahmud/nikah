@@ -9,16 +9,17 @@ import { ANON_ID } from "../../constants";
 const ctx = getContext<{ wishes: Wish[] }>("wishes");
 </script>
 
-<div class="overflow-y-scroll mt-8 flex flex-col max-h-dvh scroll-none">
-<h2 class="text-2xl font-playfair font-light w-full border-b border-slate-300 pb-1 mb-4">Ucapan</h2>
+<div class="overflow-y-scroll h-full flex flex-col max-h-dvh scroll-none mb-4">
 {#if !ctx.wishes.length}
-  <p class="text-xs text-olive-300 text-center">Be the first one to give us wish</p>
+  <p class="text-xs text-white text-center">Be the first one to give us wish</p>
 {/if}
 {#each ctx.wishes as wish, index (wish.id)}
+  {@const isRight = index % 2 !== 0}
+
   <div
     class="{clsx(
       "mb-4 w-3/4",
-      index % 2 !== 0
+      isRight
         ? "ml-auto text-right"
         : "text-left"
     )}"
@@ -27,7 +28,17 @@ const ctx = getContext<{ wishes: Wish[] }>("wishes");
       <i class="text-lg font-playfair font-light">{wish.guestSalutation.toUpperCase()}&nbsp;</i>
       <br>
     {/if}
-    <i class="text-lg font-playfair font-light">{wish.guest_id === ANON_ID ? wish.name : wish.guestName?.toUpperCase()}</i>
+    <div class={clsx(
+      isRight
+        ? "flex flex-row-reverse gap-2"
+        : "flex flex-row gap-2",
+      "items-center"
+    )}>
+      <i class="text-lg font-playfair font-light">{wish.name}</i>
+      {#if ANON_ID !== wish.guest_id}
+        <i class="fa-regular fa-circle-check"></i>
+      {/if}
+    </div>
     <p class="text-sm font-light">{wish.description}</p>
     {#if wish.gif_url}
       <img
@@ -41,7 +52,7 @@ const ctx = getContext<{ wishes: Wish[] }>("wishes");
       />
     {/if}
     <div class="{clsx(
-      "flex flex-row items-center text-olive-300/50 ml-auto text-right text-xs gap-2 mt-4",
+      "flex flex-row items-center text-white/50 ml-auto text-right text-xs gap-2 mt-4",
       index % 2 !== 0 ? "justify-end" : ""
     )}">
       <i class="fa-regular fa-clock"></i>

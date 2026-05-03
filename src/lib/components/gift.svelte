@@ -1,11 +1,11 @@
 <script lang="ts">
 import { PUBLIC_S3_URL } from "$env/static/public";
 import { Avatar, Separator } from "bits-ui";
-import Section from "./section.svelte";
 import gsap from "gsap";
 import clsx from "$lib/utils/clsx";
 import { Flip } from "gsap/Flip";
 import { tick } from "svelte";
+import Slider from "./slider.svelte";
 
 type Particle = {
 	id: number;
@@ -206,12 +206,10 @@ async function handleSwap() {
 }
 </script>
 
-<Section
+<Slider
   id="gift"
-  imgUrl={`${PUBLIC_S3_URL}/gift-2.webp`}
-  imgAlt="gift"
 >
-  <div class="rounded-sm p-4 flex flex-col text-left justify-center gap-4 text-olive-300">
+  <div class="rounded-sm p-4 flex flex-col text-left justify-center gap-4 text-white">
     <h2 class="text-2xl font-playfair">WEDDING GIFT</h2>
     <p class="font-opensans font-light text-sm">
       Tanpa mengurangi rasa hormat kami bagi tamu yang ingin mengirimkan hadiah kepada kedua
@@ -220,7 +218,7 @@ async function handleSwap() {
     <div class="relative">
 			{#each GIFT_ACCOUNTS as account, index (index)}
 				<div class={getCardClass(index)}
-					onclick={(e) => {
+					onclick={() => {
 						handleSwap();
 					}}
 					role="button"
@@ -286,4 +284,4 @@ async function handleSwap() {
 			{/each}
     </div>
   </div>
-</Section>
+</Slider>

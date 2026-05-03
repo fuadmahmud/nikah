@@ -1,16 +1,15 @@
 <script lang="ts">
-import { PUBLIC_S3_URL } from "$env/static/public";
-import Section from "./section.svelte";
 import clsx from "../utils/clsx";
 import Input from "./input.svelte";
 import gsap from "gsap";
-import Wishes from "./wishes.svelte";
 import { enhance } from "$app/forms";
 import { getContext } from "svelte";
 import type { Giphy, GiphyResponse, Guest } from "../../types";
 import type { ChangeEventHandler } from "svelte/elements";
 import { Dialog, Separator } from "bits-ui";
 import { debounce } from "$lib/utils/debounce";
+import { PUBLIC_S3_URL } from "$env/static/public";
+import Section from "./section.svelte";
 
 const guest = getContext<() => Guest>("guest");
 const STEPS = ["name", "rsvp", "wishes", "submit"];
@@ -19,11 +18,11 @@ let formEl: HTMLFormElement;
 let currentStep = $state(0);
 let name = $state(guest().name);
 let disabled = $derived(!name);
-let gifUrl = $state("");
 let gifResults = $state<Giphy[]>([]);
 let values = $state({
 	rsvp: true,
 	wishes: "",
+  gifUrl: ""
 });
 
 const handleNext = () => {
@@ -42,11 +41,17 @@ const handleNext = () => {
 
 	if (next === LAST) {
 		const formData = new FormData(formEl);
-		values = {
-			rsvp: formData.get("rsvp") === "true",
-			wishes: formData.get("wishes") as string,
-		};
-	}
+		
+    values = {
+      ...values,
+      rsvp: formData.get("rsvp") === "true",
+      wishes: formData.get("wishes") as string,
+    };
+  }
+
+  if (next === LAST - 1) {
+    disabled = true;
+  }
 
 	currentStep = next;
 };
@@ -68,6 +73,10 @@ const handleChangeName: ChangeEventHandler<HTMLInputElement> = (e) => {
 	name = e.currentTarget.value ?? "";
 };
 
+const handleChangeWish: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+	disabled = !e.currentTarget.value.trim();
+}
+
 const handleSearchGif = debounce(async (q: string) => {
 	if (!q.trim()) {
 		gifResults = [];
@@ -78,17 +87,21 @@ const handleSearchGif = debounce(async (q: string) => {
 	gifResults = responseJson.data;
 }, 400);
 </script>
+
 <Section
-  id="wishes"
-  imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
-  imgAlt="wishes"
+  id="wish-form"
+  imgUrl={`${PUBLIC_S3_URL}/wish-2.webp`}
+  imgAlt="wish-form"
+  overlayClass="bg-black/10"
 >
   <div class="flex flex-col text-left h-full gap-4">
-    <h2 class="text-2xl font-playfair text-center">UCAPAN DAN DOA</h2>
-    <p class="font-opensans font-light text-sm">Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
-        Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
-        kehadiran dan doa restunya, kami mengucapkan terima kasih.
-    </p>
+    <div class="text-shadow-readable">
+      <h2 class="text-2xl font-playfair text-center">UCAPAN DAN DOA</h2>
+      <p class="font-opensans font-light text-sm mt-4">Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
+          Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
+          kehadiran dan doa restunya, kami mengucapkan terima kasih.
+      </p>
+    </div>
     <div class="flex flex-row items-center justify-evenly gap-2 w-full">
       {#each STEPS as step, index (step)}
         <span
@@ -96,7 +109,7 @@ const handleSearchGif = debounce(async (q: string) => {
             'rounded-full p-2 h-8 w-8 flex items-center justify-center text-xs',
             index <= currentStep
               ? 'bg-olive-300 text-neutral-800'
-              : 'backdrop-blur-xs bg-white/30 text-olive-300'
+              : 'backdrop-blur-xs bg-white/30 text-white'
           )}"
         >
           {index + 1}
@@ -121,7 +134,7 @@ const handleSearchGif = debounce(async (q: string) => {
       }}
     >
       <input hidden name="slug" value={guest().slug} />
-      <input hidden name="gifUrl" bind:value={gifUrl} />
+      <input hidden name="gifUrl" bind:value={values.gifUrl} />
       <Input
         className={!currentStep ? "" : "hidden"}
         labelAttr={{
@@ -169,7 +182,8 @@ const handleSearchGif = debounce(async (q: string) => {
             id: "wishes",
             name: "wishes",
             class: "w-full text-sm",
-            maxlength: 255
+            maxlength: 255,
+            onchange: handleChangeWish
           }}
           textarea
           placeholder="Give us your best wishes"
@@ -217,7 +231,7 @@ const handleSearchGif = debounce(async (q: string) => {
                           <Dialog.Close
                             class="w-full cursor-pointer rounded-sm border border-neutral-800/20 bg-white/30 p-1 transition hover:bg-white/50"
                             onclick={() => {
-                              gifUrl = gif.images.original.url;
+                              values = { ...values, gifUrl: gif.images.original.url };
                             }}
                           >
                             <img
@@ -238,7 +252,7 @@ const handleSearchGif = debounce(async (q: string) => {
                   class="focus-visible:ring-foreground focus-visible:ring-offset-background focus-visible:outline-hidden absolute right-5 top-5 rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.98]"
                 >
                   <div>
-                    <i class="fa-solid fa-x text-olive-300"></i>
+                    <i class="fa-solid fa-x text-white"></i>
                     <span class="sr-only">Close</span>
                   </div>
                 </Dialog.Close>
@@ -246,9 +260,9 @@ const handleSearchGif = debounce(async (q: string) => {
             </Dialog.Portal>
           </Dialog.Root>
         {/if}
-        {#if gifUrl}
+        {#if values.gifUrl}
           <img
-            src={gifUrl}
+            src={values.gifUrl}
             alt="selected-gif"
             class="w-1/2 h-1/2 object-cover rounded-sm mt-2 self-center"
             loading="lazy"
@@ -272,9 +286,9 @@ const handleSearchGif = debounce(async (q: string) => {
           <dd>{values.rsvp ? "YES" : "NO"}</dd>
           <dd class="text-balance wrap-break-word">{values.wishes}</dd>
           <dd>
-            {#if gifUrl}
+            {#if values.gifUrl}
               <img
-                src={gifUrl}
+                src={values.gifUrl}
                 alt="selected-gif"
                 class="w-1/2 h-1/2 object-cover rounded-sm mt-2 self-center"
                 loading="lazy"
@@ -307,6 +321,5 @@ const handleSearchGif = debounce(async (q: string) => {
         </button>
       </div>
     </form>
-    <Wishes />
   </div>
 </Section>
