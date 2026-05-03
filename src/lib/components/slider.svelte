@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 interface SliderProps {
 	children: Snippet<[]>;
 	id?: string;
-	slides?: string[]
+	slides?: string[];
 }
 
 const DEFAULT_SLIDES = [
@@ -23,6 +23,8 @@ let slidesTL: gsap.core.Timeline;
 const { children, id, slides = DEFAULT_SLIDES }: SliderProps = $props();
 
 const slideEls: HTMLElement[] = $state([]);
+let observerTarget: HTMLDivElement;
+let observer: IntersectionObserver;
 
 function buildTransitionSegment(tl: gsap.core.Timeline, fromIdx: number) {
 	const toIdx = (fromIdx + 1) % slides.length;
@@ -99,18 +101,30 @@ onMount(() => {
 		}
 	});
 
-	startAutoplay();
+	observer = new IntersectionObserver(
+		([entry]) => {
+			if (entry.isIntersecting) {
+				startAutoplay();
+			} else {
+				stopAutoplay();
+			}
+		},
+		{ threshold: 0.2 },
+	);
+	observer.observe(observerTarget);
 });
 
 onDestroy(() => {
 	stopAutoplay();
 	gsapCtx?.clear();
+	observer.disconnect();
 });
 </script>
 
 <!-- Slider root -->
 <div class="w-full" id={id}>
   <div
+		bind:this={observerTarget}
     role="region"
     aria-label="Background image slider"
     class="relative min-h-dvh w-full bg-backdrop font-opensans cursor-default snap-start overflow-hidden"

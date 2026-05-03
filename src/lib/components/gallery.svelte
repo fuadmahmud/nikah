@@ -10,7 +10,6 @@ const photos = [
 	`${PUBLIC_S3_URL}/gift.webp`,
 	`${PUBLIC_S3_URL}/gift-2.webp`,
 	`${PUBLIC_S3_URL}/location.webp`,
-	`${PUBLIC_S3_URL}/message.webp`,
 	`${PUBLIC_S3_URL}/seating.webp`,
 	`${PUBLIC_S3_URL}/slider-1.webp`,
 	`${PUBLIC_S3_URL}/slider-2.webp`,
@@ -23,19 +22,53 @@ const photos = [
 ];
 let currentPhoto = $state(0);
 let direction = $state(1);
+let prev = $state<number | null>(null);
+let imagesPreloaded = $state(false);
+
+// Preload all gallery images into browser cache
+function preloadImages() {
+	if (imagesPreloaded) return;
+	// biome-ignore lint/complexity/noForEach: <explanation>
+	photos.forEach((src) => {
+		const img = new Image();
+		img.src = src;
+	});
+	imagesPreloaded = true;
+}
+
+// Watch the previous section and trigger preload when it's visible
+$effect(() => {
+	const prevSection = document.querySelector("#journey");
+	if (!prevSection) return;
+
+	const observer = new IntersectionObserver(
+		(entries) => {
+			if (entries[0].isIntersecting) {
+				preloadImages();
+				observer.disconnect(); // only need to fire once
+			}
+		},
+		{ threshold: 0.2 }, // trigger when 20% of the previous section is visible
+	);
+
+	observer.observe(prevSection);
+
+	return () => observer.disconnect();
+});
 
 function nextPhoto() {
-  direction = 1;
-  const next = Math.min(photos.length - 1, currentPhoto + 1)
-  currentPhoto = next;
+	if (currentPhoto === photos.length - 1) return;
+	direction = 1;
+	prev = currentPhoto;
+	currentPhoto = currentPhoto + 1;
 }
 
 function previousPhoto() {
-  direction = -1;
-  const prev = Math.max(0, currentPhoto - 1)
-  currentPhoto = prev;
+	if (currentPhoto === 0) return;
+	direction = -1;
+	prev = currentPhoto;
+	currentPhoto = currentPhoto - 1;
 }
-
 </script>
 <Section
   id="gallery"
@@ -44,18 +77,30 @@ function previousPhoto() {
   textContainerClass="h-dvh bg-black/20 p-4"
 >
   <div class="flex flex-col text-left gap-4 h-full relative overflow-hidden">
-    <div class="relative w-full h-full">
-      {#key currentPhoto}
-        <img
-          src={photos[currentPhoto]}
-          alt="Gallery"
-          class="w-full h-full object-cover absolute inset-0 will-change-transform"
-          loading="lazy"
-          fetchpriority="low"
-          in:fly={{ x: direction > 0 ? "100%" : "-90%", duration: 700, opacity: 1 }}
-          out:fly={{ x: direction > 0 ? "-90%" : "100%", duration: 700, opacity: 1 }}
-        />
-      {/key}
+    <div class="relative w-full h-full overflow-hidden">
+      {#if prev !== null}
+        {#key prev}
+          <img
+            src={photos[prev]}
+            alt="Gallery"
+            class="w-full h-full object-cover absolute inset-0 will-change-transform"
+            out:fly={{ x: direction > 0 ? '-100%' : '100%', duration: 500, opacity: 1 }}
+            onoutroend={() => (prev = null)}
+          />
+        {/key}
+      {/if}
+
+      {#if currentPhoto !== null}
+        {#key currentPhoto}
+          <img
+            src={photos[currentPhoto]}
+            alt="Gallery"
+            class="w-full h-full object-cover absolute inset-0 will-change-transform"
+            in:fly={{ x: direction > 0 ? '100%' : '-100%', duration: 500, opacity: 1 }}
+          />
+        {/key}
+      {/if}
+
     </div>
     <button
       onclick={nextPhoto}
