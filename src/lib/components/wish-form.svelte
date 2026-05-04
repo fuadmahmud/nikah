@@ -1,7 +1,7 @@
 <script lang="ts">
 import clsx from "../utils/clsx";
 import Input from "./input.svelte";
-import gsap from "gsap";
+import { gsap } from "$lib/utils/gsap";
 import { enhance } from "$app/forms";
 import { getContext } from "svelte";
 import type { Giphy, GiphyResponse, Guest } from "../../types";
@@ -22,7 +22,7 @@ let gifResults = $state<Giphy[]>([]);
 let values = $state({
 	rsvp: true,
 	wishes: "",
-  gifUrl: ""
+	gifUrl: "",
 });
 
 const handleNext = () => {
@@ -41,17 +41,17 @@ const handleNext = () => {
 
 	if (next === LAST) {
 		const formData = new FormData(formEl);
-		
-    values = {
-      ...values,
-      rsvp: formData.get("rsvp") === "true",
-      wishes: formData.get("wishes") as string,
-    };
-  }
 
-  if (next === LAST - 1) {
-    disabled = true;
-  }
+		values = {
+			...values,
+			rsvp: formData.get("rsvp") === "true",
+			wishes: formData.get("wishes") as string,
+		};
+	}
+
+	if (next === LAST - 1 && !values.wishes) {
+		disabled = true;
+	}
 
 	currentStep = next;
 };
@@ -59,6 +59,7 @@ const handleNext = () => {
 const handleBack = () => {
 	const prev = Math.max(0, currentStep - 1);
 	currentStep = prev;
+	disabled = false;
 
 	gsap.from(`#container-${STEPS[prev]}`, {
 		xPercent: 30,
@@ -75,7 +76,8 @@ const handleChangeName: ChangeEventHandler<HTMLInputElement> = (e) => {
 
 const handleChangeWish: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
 	disabled = !e.currentTarget.value.trim();
-}
+	values = { ...values, wishes: e.currentTarget.value };
+};
 
 const handleSearchGif = debounce(async (q: string) => {
 	if (!q.trim()) {
@@ -83,7 +85,7 @@ const handleSearchGif = debounce(async (q: string) => {
 		return;
 	}
 	const res = await fetch(`/api/v1/giphy?q=${encodeURIComponent(q)}`);
-  const responseJson: GiphyResponse = await res.json();
+	const responseJson: GiphyResponse = await res.json();
 	gifResults = responseJson.data;
 }, 400);
 </script>
@@ -96,7 +98,7 @@ const handleSearchGif = debounce(async (q: string) => {
 >
   <div class="flex flex-col text-left h-full gap-4">
     <div class="text-shadow-readable">
-      <h2 class="text-2xl font-playfair text-center">UCAPAN DAN DOA</h2>
+      <h2 class="text-2xl font-noto text-center">UCAPAN DAN DOA</h2>
       <p class="font-opensans font-light text-sm mt-4">Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
           Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
           kehadiran dan doa restunya, kami mengucapkan terima kasih.
@@ -308,7 +310,7 @@ const handleSearchGif = debounce(async (q: string) => {
           </button>
         {/if}
         <button 
-          class="text-sm p-3 rounded-sm text-neutral-800 bg-olive-300 cursor-pointer flex-1 disabled:opacity-80"
+          class="text-sm p-3 rounded-sm text-neutral-800 bg-white cursor-pointer flex-1 disabled:opacity-90"
           type="button"
           disabled={disabled}
           onclick={handleNext}

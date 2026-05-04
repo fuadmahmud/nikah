@@ -1,7 +1,7 @@
 <script lang="ts">
-import { onMount, onDestroy, type Snippet } from "svelte";
+import { onMount, type Snippet } from "svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
-import { gsap } from "gsap";
+import { gsap } from "$lib/utils/gsap";
 
 interface SliderProps {
 	children: Snippet<[]>;
@@ -16,23 +16,21 @@ const DEFAULT_SLIDES = [
 ];
 const SLIDE_DURATION = 2;
 const TRANSITION = 1.3;
+const OPENING_ID = "opening";
 
 let gsapCtx: gsap.Context;
-let current = $state(0);
 let slidesTL: gsap.core.Timeline;
 const { children, id, slides = DEFAULT_SLIDES }: SliderProps = $props();
 
-const slideEls: HTMLElement[] = $state([]);
-let observerTarget: HTMLDivElement;
-let observer: IntersectionObserver;
+const slideEls: HTMLImageElement[] = [];
 
 function buildTransitionSegment(tl: gsap.core.Timeline, fromIdx: number) {
 	const toIdx = (fromIdx + 1) % slides.length;
-
 	const fromEl = slideEls[fromIdx];
 	const toEl = slideEls[toIdx];
 
-	// Each segment starts at a labelled position so repeat:-1 replays cleanly
+	if (!fromEl || !toEl) return;
+
 	const label = `slide-${fromIdx}`;
 	tl.addLabel(label);
 
@@ -44,112 +42,82 @@ function buildTransitionSegment(tl: gsap.core.Timeline, fromIdx: number) {
 			duration: TRANSITION,
 			ease: "power2.inOut",
 			onStart: () => {
-				current = toIdx;
-				// Bring incoming slide underneath at scale 0.94, then grow it
 				gsap.set(toEl, { zIndex: 1, opacity: 0, scale: 0.94 });
 				gsap.set(fromEl, { zIndex: 2 });
 			},
 			onComplete: () => {
+				// Reset the slide so it's ready for its next appearance
 				gsap.set(fromEl, { opacity: 1, scale: 1, zIndex: 0 });
 			},
 		},
 		`${label}+=${SLIDE_DURATION}`,
-	)
-
-		// Incoming: fade in + scale up to natural size
-		.to(
-			toEl,
-			{
-				opacity: 1,
-				scale: 1,
-				duration: TRANSITION,
-				ease: "power2.inOut",
-			},
-			`${label}+=${SLIDE_DURATION}`,
-		);
-}
-
-function startAutoplay() {
-	slidesTL?.play();
-}
-
-function stopAutoplay() {
-	slidesTL?.pause();
+	).to(
+		toEl,
+		{
+			opacity: 1,
+			scale: 1,
+			duration: TRANSITION,
+			ease: "power2.inOut",
+		},
+		`${label}+=${SLIDE_DURATION}`,
+	);
 }
 
 onMount(() => {
+	// gsap.context handles all scoped animations
 	gsapCtx = gsap.context(() => {
+		// Initial setup
 		slideEls.forEach((el, i) => {
-			gsap.set(el, { zIndex: i === 0 ? 1 : 0 });
+			if (el)
+				gsap.set(el, { zIndex: i === 0 ? 1 : 0, opacity: i === 0 ? 1 : 0 });
 		});
 
-		gsap.to(".arrow", {
-			duration: 1.5,
-			repeat: -1,
-			boxShadow: "rgba(216, 216, 208, 0.5) 0px 0px 12px",
-		});
-		gsap.to(".fa-angle-down", {
-			duration: 1.5,
-			repeat: -1,
-			y: 10,
-		});
+		if (OPENING_ID === id) {
+			gsap.to(".arrow", {
+				duration: 1.5,
+				repeat: -1,
+				boxShadow: "rgba(216, 216, 208, 0.5) 0px 0px 12px",
+			});
+			gsap.to(".fa-angle-down", {
+				duration: 1.5,
+				repeat: -1,
+				y: 10,
+			});
+		}
 
-		slidesTL = gsap.timeline({ repeat: -1, delay: 2 });
+		slidesTL = gsap.timeline({ repeat: -1, delay: 1 });
 
 		for (let i = 0; i < slides.length; i++) {
 			buildTransitionSegment(slidesTL, i);
 		}
 	});
 
-	observer = new IntersectionObserver(
-		([entry]) => {
-			if (entry.isIntersecting) {
-				startAutoplay();
-			} else {
-				stopAutoplay();
-			}
-		},
-		{ threshold: 0.2 },
-	);
-	observer.observe(observerTarget);
-});
-
-onDestroy(() => {
-	stopAutoplay();
-	gsapCtx?.clear();
-	observer.disconnect();
+	return () => {
+		gsapCtx?.revert();
+	};
 });
 </script>
 
 <!-- Slider root -->
-<div class="w-full" id={id}>
+<div class="min-h-svh w-full" id={id}>
   <div
-		bind:this={observerTarget}
     role="region"
     aria-label="Background image slider"
     class="relative min-h-dvh w-full bg-backdrop font-opensans cursor-default snap-start overflow-hidden"
   >
     <!-- Slides -->
     {#each slides as slide, i (slide)}
-      <div
-        bind:this={slideEls[i]}
-        aria-hidden={i !== current}
-        class="absolute inset-0"
-      >
-        <!-- Parallax bg — inset -8% gives room for the parallax shift -->
-        <div
-          class="bg-img absolute bg-cover bg-center will-change-transform"
-          style="inset: -8%; background-image: url('{slide}')"
-        ></div>
-
-        <!-- Gradient overlay -->
-        <div
-          class="absolute inset-0"
-          style="background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.4) 100%)"
-        ></div>
-      </div>
+			<img
+				bind:this={slideEls[i]}
+				src={slide}
+				alt="slide-{i}"
+				loading="eager"
+				fetchpriority="high"
+				class="absolute object-cover will-change-transform inset-0 h-full w-full"
+			>
     {/each}
-    <div class="z-10 relative w-full flex flex-col text-white p-8 items-center-safe">
+		<div class="bg-black/30 h-full w-full absolute inset-0 z-10"></div>
+    <div class="z-20 relative w-full flex flex-col text-white p-8 items-center-safe">
       {@render children()}
     </div>
   </div>

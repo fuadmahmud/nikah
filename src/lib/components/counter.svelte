@@ -28,12 +28,12 @@ $effect(() => {
 </script>
 
 
-<div class="flex flex-col justify-start gap-2 font-playfair my-auto">
-  <h2 class="text-xl font-playfair text-center">COUNT THE DATE</h2>
+<div class="flex flex-col justify-start gap-2 font-noto my-auto">
+  <h2 class="text-xl font-noto text-center">COUNT THE DATE</h2>
   <div class="flex flex-row items-center w-full justify-evenly font-light">
     {#each timer.split(" ") as time, i (i)}
       <div class="w-1/5">
-        <div class="font-playfair">
+        <div class="font-noto">
           <p class="text-2xl">{time}</p>
           <i>{TIME_LABEL[i]}</i>
         </div>

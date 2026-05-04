@@ -4,9 +4,8 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				opensans: ["Bricolage Grotesque", "sans-serif"],
-				dancing: ["'Dancing Script'", "cursive"],
-				playfair: ["Noto Serif", "serif"],
+				opensans: ["Playfair Display", "sans-serif"],
+				noto: ["Noto Serif", "serif"],
 			},
 		},
 	},

@@ -6,7 +6,7 @@ import type {
 } from "svelte/elements";
 import clsx from "../utils/clsx";
 import { onDestroy, onMount } from "svelte";
-import gsap from "gsap";
+import { gsap } from "$lib/utils/gsap";
 
 interface InputProps {
 	className?: string;
@@ -77,7 +77,7 @@ function deactivate() {
 
 <div
   class="{clsx(
-		"relative font-playfair",
+		"relative font-noto",
 		className ?? ""
 	)}"
 	id="container-{inputAttr.id || textAreaAttr.id}"

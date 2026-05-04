@@ -1,8 +1,7 @@
 <script lang="ts">
 import { PUBLIC_S3_URL } from "$env/static/public";
 import { onDestroy, onMount } from "svelte";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap } from "$lib/utils/gsap";
 import Section from "./section.svelte";
 
 interface Person {
@@ -26,8 +25,6 @@ const classes = $derived(
 let socialEl: HTMLAnchorElement;
 let wrapperEl: HTMLDivElement;
 let gsapCtx: gsap.Context | undefined;
-
-gsap.registerPlugin(ScrollTrigger);
 
 onMount(async () => {
 	await document.fonts.ready;
@@ -63,8 +60,6 @@ onMount(async () => {
 			stagger: 0.25,
 			ease: "power3.out",
 		});
-
-		ScrollTrigger.refresh();
 	}, wrapperEl);
 });
 
@@ -79,8 +74,8 @@ onDestroy(() => {
 	textContainerClass="mt-auto"
 >
   <div bind:this={wrapperEl} class={classes}>
-    <p class="person-anim-text overflow-hidden font-playfair uppercase text-sm">THE {role}</p>
-    <h3 class="person-anim-text overflow-hidden text-2xl font-playfair border-t pt-1 w-max">{name}</h3>
+    <p class="person-anim-text overflow-hidden font-noto uppercase text-sm">THE {role}</p>
+    <h3 class="person-anim-text overflow-hidden text-2xl font-noto border-t pt-1 w-max">{name}</h3>
     <i class="person-anim-text overflow-hidden font-opensans text-sm font-light">{child}</i>
     <p class="person-anim-text overflow-hidden font-opensans text-sm font-light">{parent}</p>
     <a

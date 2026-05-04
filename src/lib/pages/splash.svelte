@@ -3,7 +3,7 @@ import { blur } from "svelte/transition";
 import { WEDDING_DATE } from "../../constants";
 import { PUBLIC_S3_URL } from "$env/static/public";
 import type { Guest } from "../../types";
-	import { getContext } from "svelte";
+import { getContext } from "svelte";
 
 interface SplashProps {
 	onOpen: () => void;
@@ -32,11 +32,11 @@ const year = WEDDING_DATE.getFullYear();
         <p>{monthAndDate}</p>
         <p>{year}</p>
       </div>
-      <p class="font-light tracking-wide text-xs font-playfair text-white/90">WE INVITE YOU TO CELEBRATE</p>
-      <h5 class="text-2xl font-playfair font-light tracking-widest">ANGGITA & FUAD</h5>
+      <p class="font-light tracking-wide text-xs font-noto text-white/90">WE INVITE YOU TO CELEBRATE</p>
+      <h5 class="text-2xl font-noto font-light tracking-widest">ANGGITA & FUAD</h5>
     </div>
     <div class="flex flex-col justify-self-end text-center pb-12">
-      <p class="font-playfair tracking-widest">Kepada Yth.</p>
+      <p class="font-noto tracking-widest">Kepada Yth.</p>
       <p>
         {#if guest?.salutation}
           <span>{guest.salutation}</span>

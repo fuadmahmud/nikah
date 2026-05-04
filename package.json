@@ -46,6 +46,8 @@
 		"wrangler": "^4.63.0"
 	},
 	"dependencies": {
+		"@fontsource-variable/noto-serif": "^5.2.9",
+		"@fontsource-variable/playfair-display": "^5.2.8",
 		"@fortawesome/fontawesome-free": "^7.2.0",
 		"@supabase/ssr": "^0.10.2",
 		"@supabase/supabase-js": "^2.104.1",

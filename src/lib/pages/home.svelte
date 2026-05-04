@@ -1,8 +1,6 @@
 <script lang="ts">
 import Section from "../components/section.svelte";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
+import { gsap, ScrollTrigger } from "$lib/utils/gsap";
 import { onDestroy, onMount } from "svelte";
 import Slider from "../components/slider.svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
@@ -14,8 +12,7 @@ import Gift from "../components/gift.svelte";
 import Wishes from "../components/wishes.svelte";
 import WishForm from "../components/wish-form.svelte";
 import { WISH_SLIDER_IMAGES } from "../../constants";
-
-gsap.registerPlugin(ScrollTrigger, SplitText);
+import Journey from "$lib/components/journey.svelte";
 
 let gsapCtx: gsap.Context;
 let audioEl: HTMLAudioElement;
@@ -26,7 +23,6 @@ onMount(async () => {
 	await document.fonts.ready;
 
 	gsapCtx = gsap.context(() => {
-		ScrollTrigger.defaults({ scroller: ".parent" });
 		gsap.set(".surah-text", { visibility: "hidden" });
 
 		const surahTween = gsap.from(".surah-text", {
@@ -46,23 +42,6 @@ onMount(async () => {
 			onEnterBack: () => surahTween.restart(true),
 			onLeave: () => gsap.set(".surah-text", { yPercent: 20, opacity: 0 }),
 			onLeaveBack: () => gsap.set(".surah-text", { yPercent: 20, opacity: 0 }),
-		});
-
-		SplitText.create(".journey-text", {
-			type: "words",
-			reduceWhiteSpace: true,
-			onSplit: (self) => {
-				gsap.from(self.words, {
-					scrollTrigger: {
-						trigger: "#journey",
-						start: "top 80%",
-					},
-					opacity: 0,
-					autoAlpha: 0,
-					stagger: 0.1,
-					duration: 3,
-				});
-			},
 		});
 
 		ScrollTrigger.refresh();
@@ -103,15 +82,15 @@ function handleVisibilityChange() {
 </script>
 
 <div
-  class="h-dvh w-dvw overflow-x-hidden overflow-y-scroll snap-y snap-mandatory parent font-opensans scroll-none"
+  class="h-svh max-w-full overflow-x-hidden overflow-y-auto parent snap-y snap-mandatory font-opensans scroll-none"
   in:blur={{ duration: 900, delay: 1100, opacity: 80 }}
 >
   <!-- Opening Section -->
-  <Slider>
+  <Slider id="opening">
     <div class="flex flex-col gap-2 text-center items-center justify-center">
-      <p class="font-playfair text-xl mb-4">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+      <p class="font-noto text-xl mb-4">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
       <p class="font-light tracking-wide text-xs">THE WEDDING OF</p>
-      <h5 class="text-2xl font-playfair font-light tracking-wider">ANGGITA & FUAD</h5>	
+      <h5 class="text-2xl font-noto font-light tracking-wider">ANGGITA & FUAD</h5>	
     </div>
     <div class="arrow border rounded-full border-olive-300 h-10 w-10 p-2 relative mt-2 flex items-center justify-center">
       <i class="fa-solid fa-angle-down font-light -mt-1"></i>
@@ -125,7 +104,7 @@ function handleVisibilityChange() {
   >
     <div class="text-left h-max overflow-hidden rounded-md p-2 mt-[25%]">
       <div class="surah-text flex flex-col justify-end gap-4 text-shadow-readable">
-        <h2 class="text-2xl font-playfair tracking-wide">Q.S. AR-RUM: 21</h2>
+        <h2 class="text-2xl font-noto tracking-wide">Q.S. AR-RUM: 21</h2>
         <p class="font-opensans font-light text-sm/5">Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
       </div>
     </div>
@@ -153,50 +132,14 @@ function handleVisibilityChange() {
 
   <Location />
 
-  <Section
-    id="journey"
-    imgUrl="{PUBLIC_S3_URL}/journey.webp"
-    imgAlt="journey"
-    textContainerClass="p-8"
-  >
-    <div class="flex flex-col text-left h-full justify-center gap-4 my-auto">
-      <h2 class="text-2xl font-playfair text-center">OUR JOURNEY</h2>
-      <div class="journey-text font-light font-opensans text-[3vw] md:text-base">
-        Terkadang, dua orang yang sudah begitu dekat jaraknya, justru dipertemukan pada waktu yang paling tepat.
-        <br />
-        <br />
-        <b>Agustus 2023</b>
-        <br />
-        Kami dipertemukan di acara lamaran seorang teman, yang ternyata menjadi titik awal cerita kami. Sebenarnya kami sudah berada di lingkungan yang sama sejak lama, dan keluarga yang sudah saling mengenal, namun kami baru bertemu satu sama lain saat itu.
-        <br />
-        <br />
-        Sejak hari itu, sebuah langkah kecil dimulai.
-        Fuad memberanikan diri menyapa melalui media sosial, dan dari percakapan sederhana, tumbuh rasa nyaman yang perlahan  mendekatkan kami. 
-        <br />
-        <br />
-        <b>Desember 2023</b>
-        <br />
-        Kami memilih untuk berjalan bersama, saling menjaga, dan menguatkan dalam satu tujuan yang sama.
-        <br />
-        <br />
-        <b>Januari 2026</b>
-        <br />
-        Kami mengikat niat dalam sebuah lamaran, menyatukan dua keluarga dalam satu harapan.
-        <br />
-        <br />
-        <b>Mei 2026</b>
-        <br />
-        Akan menjadi awal dari selamanya langkah baru sebagai dua hati yang dipersatukan dalam satu ikatan suci. 
-      </div>
-    </div>
-  </Section>
+  <Journey />
 
   <Gallery />
 
   <WishForm />
 
   <Slider id="wishes" slides={WISH_SLIDER_IMAGES}>
-    <h2 class="text-2xl font-playfair font-light w-full border-b border-slate-300 pb-1 mb-2">Ucapan</h2>
+    <h2 class="text-2xl font-noto font-light w-full border-b border-slate-300 pb-1 mb-2">Ucapan</h2>
     <Wishes />
   </Slider>
 
@@ -208,7 +151,7 @@ function handleVisibilityChange() {
     imgAlt="closing"
   >
     <div class="flex flex-col text-center h-full justify-center gap-4 text-shadow-lg font-light">
-      <h2 class="text-2xl font-playfair">UCAPAN TERIMA KASIH</h2>
+      <h2 class="text-2xl font-noto">UCAPAN TERIMA KASIH</h2>
       <p class="text-sm">Kami mohon maaf apabila ada salah dalam penyebutan nama ataupun gelar.</p>
       <p class="text-sm">
         Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
@@ -216,7 +159,7 @@ function handleVisibilityChange() {
         kehadiran dan doa restunya, kami mengucapkan terima kasih.
       </p>
       <p class="text-sm">Wassalamu'alaikum Wr. Wb.</p>
-      <h4 class="text-2xl font-playfair tracking-wider">ANGGITA & FUAD</h4>
+      <h4 class="text-2xl font-noto tracking-wider">ANGGITA & FUAD</h4>
     </div>
   </Section>
   

@@ -5,9 +5,7 @@ import { onDestroy, onMount } from "svelte";
 import { WEDDING_DATE } from "../../constants";
 import Counter from "./counter.svelte";
 import Section from "./section.svelte";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
+import { gsap, SplitText } from "$lib/utils/gsap";
 
 const ADDRESS =
 	"Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120";
@@ -15,8 +13,6 @@ const ADDRESS =
 let gsapCtx: gsap.Context | undefined;
 let wrapperEl: HTMLDivElement;
 let splitTextInstance: SplitText | undefined;
-
-gsap.registerPlugin(ScrollTrigger, SplitText);
 
 onMount(async () => {
 	await document.fonts.ready;
@@ -36,6 +32,7 @@ onMount(async () => {
 				start: "top 80%",
 				toggleActions: "restart restart none none",
 			},
+			delay: 1,
 		});
 
 		tl.fromTo(
@@ -68,23 +65,23 @@ onDestroy(() => {
 >
   <div class="flex flex-col gap-12" bind:this={wrapperEl}>
     <div class="flex flex-col justify-start gap-4 mb-4">
-      <h2 class="text-2xl font-playfair text-scrub">{formatDate(WEDDING_DATE)?.toUpperCase()}</h2>
+      <h2 class="text-2xl font-noto text-scrub">{formatDate(WEDDING_DATE)?.toUpperCase()}</h2>
       <div class="h-px w-auto grow bg-white"></div>
       <div class="flex flex-row items-center justify-between">
         <p>
-          <span class="font-playfair text-lg text-scrub">AKAD NIKAH</span>
+          <span class="font-noto text-lg text-scrub">AKAD NIKAH</span>
           <br>
           <span class="font-light">16.00 WIB</span>
         </p>
         <p>
-          <span class="font-playfair text-lg text-scrub">RESEPSI</span>
+          <span class="font-noto text-lg text-scrub">RESEPSI</span>
           <br>
           <span class="font-light">19.00 - 21.00 WIB</span>
         </p>
       </div>
       <div class="h-px w-auto grow bg-white"></div>
       <div class="font-opensans text-sm flex flex-col gap-1">
-        <span class="font-playfair text-lg text-scrub">GOR MATRAMAN</span>
+        <span class="font-noto text-lg text-scrub">GOR MATRAMAN</span>
         <span class="font-light">{ADDRESS}</span>
         <a
           href="https://maps.app.goo.gl/hrQ8rohJTUW7kLoW9"

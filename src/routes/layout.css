@@ -1,17 +1,38 @@
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Dancing+Script:wght@400..700&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
+@font-face {
+	font-family: "Noto Serif Variable";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 100 900;
+	src: url("@fontsource-variable/noto-serif/files/noto-serif-latin-wght-normal.woff2")
+		format("woff2-variations");
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* playfair-display-latin-wght-italic */
+@font-face {
+	font-family: "Playfair Display Variable";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 400 900;
+	src: url("@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2")
+		format("woff2-variations");
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 @theme {
 	--font-opensans: "Playfair Display", sans-serif;
-	--font-dancing: "Dancing Script", cursive;
-	--font-playfair: "Noto Serif", serif;
+	--font-noto: "Noto Serif Variable", serif;
 	--color-backdrop: oklch(0.1448 0 0);
 }
 
 @utility text-shadow-readable {
-	text-shadow: 0 1px 3px rgba(0,0,0,1), 0 0 15px rgba(0,0,0,0.85), 0 0 40px rgba(0,0,0,0.6);
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 1), 0 0 15px rgba(0, 0, 0, 0.85), 0 0
+		40px rgba(0, 0, 0, 0.6);
 }
 
 .scroll-none {

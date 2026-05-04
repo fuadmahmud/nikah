@@ -9,7 +9,7 @@ import { ANON_ID } from "../../constants";
 const ctx = getContext<{ wishes: Wish[] }>("wishes");
 </script>
 
-<div class="overflow-y-scroll h-full flex flex-col max-h-dvh scroll-none mb-4">
+<div class="overflow-y-scroll w-full flex flex-col max-h-dvh scroll-none mb-4">
 {#if !ctx.wishes.length}
   <p class="text-xs text-white text-center">Be the first one to give us wish</p>
 {/if}
@@ -25,7 +25,7 @@ const ctx = getContext<{ wishes: Wish[] }>("wishes");
     )}"
   >
     {#if wish.guestSalutation}
-      <i class="text-lg font-playfair font-light">{wish.guestSalutation.toUpperCase()}&nbsp;</i>
+      <i class="text-lg font-noto font-light">{wish.guestSalutation.toUpperCase()}&nbsp;</i>
       <br>
     {/if}
     <div class={clsx(
@@ -34,7 +34,7 @@ const ctx = getContext<{ wishes: Wish[] }>("wishes");
         : "flex flex-row gap-2",
       "items-center"
     )}>
-      <i class="text-lg font-playfair font-light">{wish.name}</i>
+      <i class="text-lg font-noto font-light">{wish.name}</i>
       {#if ANON_ID !== wish.guest_id}
         <i class="fa-regular fa-circle-check"></i>
       {/if}

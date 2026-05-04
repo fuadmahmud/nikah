@@ -1,11 +1,10 @@
 <script lang="ts">
 import { PUBLIC_S3_URL } from "$env/static/public";
 import { Avatar, Separator } from "bits-ui";
-import gsap from "gsap";
 import clsx from "$lib/utils/clsx";
-import { Flip } from "gsap/Flip";
 import { tick } from "svelte";
-import Slider from "./slider.svelte";
+import Section from "./section.svelte";
+import { gsap, Flip } from "$lib/utils/gsap";
 
 type Particle = {
 	id: number;
@@ -29,11 +28,8 @@ const GIFT_ACCOUNTS = [
 		value: "093401009179508",
 		img: "bride.webp",
 		fallback: "AKP",
-	}
+	},
 ];
-
-const firstClass = ["absolute", "inset-0", "opacity-25"];
-const secondClass = ["relative", "-translate-x-3.5", "translate-y-3", "z-10"];
 
 const EMOJI_SETS = [
 	"🎉",
@@ -50,8 +46,8 @@ const EMOJI_SETS = [
 ];
 const PARTICLE_COUNT = 15;
 
-let particleElsByCard: HTMLDivElement[][] = $state(
-	GIFT_ACCOUNTS.map(() => [] as HTMLDivElement[]),
+const particleElsByCard: HTMLDivElement[][] = GIFT_ACCOUNTS.map(
+	() => [] as HTMLDivElement[],
 );
 let particles: Particle[] = $state(
 	Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
@@ -62,20 +58,20 @@ let particles: Particle[] = $state(
 		visible: false,
 	})),
 );
-let ringEls: Array<HTMLDivElement | undefined> = $state(
-	GIFT_ACCOUNTS.map(() => undefined),
+const ringEls: Array<HTMLDivElement | undefined> = GIFT_ACCOUNTS.map(
+	() => undefined,
 );
 let activeBurstIndex: number | null = $state(null);
-let cardEls: HTMLDivElement[] = $state([]);
+const cardEls: HTMLDivElement[] = [];
 let swapped = $state(false);
-
-gsap.registerPlugin(Flip);
 
 function getCardClass(index: number) {
 	const isFirst = swapped ? index === 1 : index === 0;
 	return clsx(
 		"bg-olive-300 rounded-sm p-4 cursor-sw-resize",
-		isFirst ? firstClass.join(" ") : secondClass.join(" "),
+		isFirst
+			? "absolute inset-0 opacity-25"
+			: "relative -translate-x-3.5 translate-y-3 z-10",
 	);
 }
 
@@ -206,11 +202,13 @@ async function handleSwap() {
 }
 </script>
 
-<Slider
+<Section
   id="gift"
+	imgUrl="{PUBLIC_S3_URL}/gallery-3.webp"
+	imgAlt="gift"
 >
   <div class="rounded-sm p-4 flex flex-col text-left justify-center gap-4 text-white">
-    <h2 class="text-2xl font-playfair text-shadow-readable">WEDDING GIFT</h2>
+    <h2 class="text-2xl font-noto text-shadow-readable">WEDDING GIFT</h2>
     <p class="font-opensans font-light text-sm text-shadow-readable">
       Tanpa mengurangi rasa hormat kami bagi tamu yang ingin mengirimkan hadiah kepada kedua
       mempelai, silahkan klik pada salah satu kartu di bawah ini:
@@ -284,4 +282,4 @@ async function handleSwap() {
 			{/each}
     </div>
   </div>
-</Slider>
+</Section>
