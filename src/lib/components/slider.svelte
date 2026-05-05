@@ -99,11 +99,11 @@ onMount(() => {
 </script>
 
 <!-- Slider root -->
-<div class="min-h-svh w-full" id={id}>
+<section class="h-svh w-full snap-start" id={id}>
   <div
     role="region"
     aria-label="Background image slider"
-    class="relative min-h-dvh w-full bg-backdrop font-opensans cursor-default snap-start overflow-hidden"
+    class="relative min-h-dvh w-full bg-backdrop font-opensans cursor-default overflow-hidden"
   >
     <!-- Slides -->
     {#each slides as slide, i (slide)}
@@ -121,4 +121,4 @@ onMount(() => {
       {@render children()}
     </div>
   </div>
-</div>
+</section>

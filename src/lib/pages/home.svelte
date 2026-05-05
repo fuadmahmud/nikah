@@ -1,7 +1,7 @@
 <script lang="ts">
 import Section from "../components/section.svelte";
 import { gsap, ScrollTrigger } from "$lib/utils/gsap";
-import { onDestroy, onMount } from "svelte";
+import { onMount } from "svelte";
 import Slider from "../components/slider.svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
 import Person from "../components/person.svelte";
@@ -14,50 +14,43 @@ import WishForm from "../components/wish-form.svelte";
 import { WISH_SLIDER_IMAGES } from "../../constants";
 import Journey from "$lib/components/journey.svelte";
 
-let gsapCtx: gsap.Context;
 let audioEl: HTMLAudioElement;
 let isAudioPlay = $state(true);
 let audioTimeout: ReturnType<typeof setTimeout>;
+let scrollContainer: HTMLDivElement;
 
-onMount(async () => {
-	await document.fonts.ready;
+onMount(() => {
+	ScrollTrigger.defaults({
+		scroller: scrollContainer,
+		toggleActions: "restart pause resume pause",
+	});
 
-	gsapCtx = gsap.context(() => {
+	const gsapCtx = gsap.context(() => {
 		gsap.set(".surah-text", { visibility: "hidden" });
 
-		const surahTween = gsap.from(".surah-text", {
+		gsap.from(".surah-text", {
 			yPercent: -20,
 			autoAlpha: 0,
 			duration: 2,
 			stagger: 0.05,
 			ease: "power3.out",
-			immediateRender: false,
+			scrollTrigger: {
+				trigger: "#surah",
+			},
 		});
-
-		ScrollTrigger.create({
-			trigger: "#surah",
-			start: "top 80%",
-			end: "bottom 20%",
-			onEnter: () => surahTween.restart(true),
-			onEnterBack: () => surahTween.restart(true),
-			onLeave: () => gsap.set(".surah-text", { yPercent: 20, opacity: 0 }),
-			onLeaveBack: () => gsap.set(".surah-text", { yPercent: 20, opacity: 0 }),
-		});
-
-		ScrollTrigger.refresh();
 	});
 
 	audioTimeout = setTimeout(() => {
 		audioEl.play();
-	}, 1100);
+	}, 1000);
 
 	document.addEventListener("visibilitychange", handleVisibilityChange);
-});
 
-onDestroy(() => {
-	gsapCtx?.kill();
-	clearTimeout(audioTimeout);
-	document.removeEventListener("visibilitychange", handleVisibilityChange);
+	return () => {
+		gsapCtx?.kill();
+		clearTimeout(audioTimeout);
+		document.removeEventListener("visibilitychange", handleVisibilityChange);
+	};
 });
 
 function handleMusic() {
@@ -82,8 +75,9 @@ function handleVisibilityChange() {
 </script>
 
 <div
-  class="h-svh max-w-full overflow-x-hidden overflow-y-auto parent snap-y snap-mandatory font-opensans scroll-none"
+  class="max-h-svh max-w-full overflow-x-hidden overflow-y-scroll snap-y snap-mandatory parent font-opensans scroll-none"
   in:blur={{ duration: 900, delay: 1100, opacity: 80 }}
+  bind:this={scrollContainer}
 >
   <!-- Opening Section -->
   <Slider id="opening">

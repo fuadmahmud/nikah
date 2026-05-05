@@ -35,12 +35,10 @@ onMount(async () => {
 	gsapCtx = gsap.context(() => {
 		const textTargets =
 			wrapperEl.querySelectorAll<HTMLElement>(".person-anim-text");
-
 		for (const target of textTargets) {
 			gsap.set(target, { visibility: "hidden" });
 		}
 		gsap.set(socialEl, { visibility: "hidden" });
-
 		const tl = gsap.timeline({
 			scrollTrigger: {
 				id: `person-${role}`,
@@ -52,7 +50,6 @@ onMount(async () => {
 				invalidateOnRefresh: true,
 			},
 		});
-
 		tl.from([...textTargets, socialEl], {
 			x: xFrom,
 			autoAlpha: 0,
@@ -64,7 +61,7 @@ onMount(async () => {
 });
 
 onDestroy(() => {
-	gsapCtx?.kill();
+	gsapCtx?.revert();
 });
 </script>
 <Section

@@ -3,6 +3,7 @@ import "./layout.css";
 import favicon from "$lib/assets/favicon.svg";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { setContext } from "svelte";
+import { gsap, ScrollTrigger, SplitText, Flip } from "$lib/utils/gsap.js";
 
 const { data, children } = $props();
 const guest = $derived(data.guest);
@@ -17,6 +18,8 @@ setContext("wishes", {
 	},
 });
 setContext("guest", () => data.guest);
+
+gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
 </script>
 
 <svelte:head>

@@ -24,7 +24,7 @@ const {
 }: SectionProps = $props();
 const rootClass = $derived(
 	clsx(
-		"min-h-svh w-full relative snap-start flex flex-col will-change-transform backface-hidden",
+		"h-svh w-full relative flex flex-col will-change-transform backface-hidden snap-start",
 		classNames ?? "",
 	),
 );
@@ -37,20 +37,6 @@ const contentClass = $derived(
 </script>
 
 <section class={rootClass} id={id} {...props}>
-	<div class="absolute inset-0 hidden lg:grid lg:grid-cols-[1fr_minmax(0,40rem)_1fr]">
-		<div
-			class="bg-cover bg-center blur-xl scale-110 opacity-50"
-			style={`background-image: url('${imgUrl}')`}
-			aria-hidden="true"
-		></div>
-		<div aria-hidden="true"></div>
-		<div
-			class="bg-cover bg-center blur-xl scale-110 opacity-50"
-			style={`background-image: url('${imgUrl}')`}
-			aria-hidden="true"
-		></div>
-	</div>
-
 	<div
 		class="min-h-dvh relative w-full lg:mx-auto lg:max-w-160 flex flex-col"
 	>
