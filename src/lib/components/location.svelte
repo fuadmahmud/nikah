@@ -30,7 +30,7 @@ onMount(async () => {
 				...(scrollerEl ? { scroller: scrollerEl } : {}),
 				trigger: wrapperEl,
 				start: "top 80%",
-				toggleActions: "restart restart none none",
+				toggleActions: "play pause resume none",
 			},
 			delay: 1,
 		});

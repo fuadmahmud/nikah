@@ -1,0 +1,16 @@
+{
+  "name": "The Wedding of Fuad & Anggita",
+  "short_name": "Fuad & Anggita",
+  "description": "The Wedding Invitation of Anggita & Fuad",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#201f1f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml"
+    }
+  ]
+}

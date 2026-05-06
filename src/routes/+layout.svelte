@@ -24,6 +24,8 @@ gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<link rel="manifest" href="/manifest.json" />
+	<link rel="apple-touch-icon" href="/favicon.svg" />
 	<title>The Wedding of Fuad & Anggita</title>
 	<meta name="description" content="The Wedding Invitation of Anggita & Fuad">
 	<meta property="og:title" content="The Wedding of Anggita & Fuad">

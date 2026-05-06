@@ -22,7 +22,7 @@ let gsapCtx: gsap.Context;
 let slidesTL: gsap.core.Timeline;
 const { children, id, slides = DEFAULT_SLIDES }: SliderProps = $props();
 
-const slideEls: HTMLImageElement[] = [];
+const slideEls: HTMLDivElement[] = [];
 
 function buildTransitionSegment(tl: gsap.core.Timeline, fromIdx: number) {
 	const toIdx = (fromIdx + 1) % slides.length;
@@ -107,14 +107,13 @@ onMount(() => {
   >
     <!-- Slides -->
     {#each slides as slide, i (slide)}
-			<img
+			<div
 				bind:this={slideEls[i]}
-				src={slide}
-				alt="slide-{i}"
-				loading="eager"
-				fetchpriority="high"
-				class="absolute object-cover will-change-transform inset-0 h-full w-full"
-			>
+				role="img"
+				aria-label="slide-{i}"
+				class="absolute inset-0 bg-cover bg-center will-change-transform"
+				style="background-image: url({slide})"
+			></div>
     {/each}
 		<div class="bg-black/30 h-full w-full absolute inset-0 z-10"></div>
     <div class="z-20 relative w-full flex flex-col text-white p-8 items-center-safe">

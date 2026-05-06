@@ -1,7 +1,7 @@
 <script lang="ts">
 import Section from "../components/section.svelte";
-import { gsap, ScrollTrigger } from "$lib/utils/gsap";
-import { onMount } from "svelte";
+import { gsap, ScrollTrigger, SplitText } from "$lib/utils/gsap";
+import { onMount, onDestroy } from "svelte";
 import Slider from "../components/slider.svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
 import Person from "../components/person.svelte";
@@ -18,14 +18,18 @@ let audioEl: HTMLAudioElement;
 let isAudioPlay = $state(true);
 let audioTimeout: ReturnType<typeof setTimeout>;
 let scrollContainer: HTMLDivElement;
+let closingEl: HTMLDivElement;
+let gsapCtx: gsap.Context | undefined;
 
-onMount(() => {
+onMount(async () => {
+	await document.fonts.ready;
+
 	ScrollTrigger.defaults({
 		scroller: scrollContainer,
 		toggleActions: "restart pause resume pause",
 	});
 
-	const gsapCtx = gsap.context(() => {
+	gsapCtx = gsap.context(() => {
 		gsap.set(".surah-text", { visibility: "hidden" });
 
 		gsap.from(".surah-text", {
@@ -37,20 +41,54 @@ onMount(() => {
 			scrollTrigger: {
 				trigger: "#surah",
 			},
+			delay: 0.5,
 		});
+
+		const blocks = [
+			closingEl.querySelector("h2"),
+			...closingEl.querySelectorAll("p"),
+			closingEl.querySelector("h4"),
+		];
+
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: closingEl,
+				start: "top 80%",
+				toggleActions: "play pause resume none",
+			},
+		});
+
+		for (const block of blocks) {
+			const split = SplitText.create(block, {
+				type: "lines",
+				reduceWhiteSpace: true,
+			});
+
+			tl.from(
+				split.lines,
+				{
+					opacity: 0,
+					autoAlpha: 0,
+					y: 30,
+					stagger: 0.05,
+					duration: 1,
+				},
+				"+=0.1",
+			);
+		}
 	});
 
 	audioTimeout = setTimeout(() => {
 		audioEl.play();
-	}, 1000);
+	}, 500);
 
 	document.addEventListener("visibilitychange", handleVisibilityChange);
+});
 
-	return () => {
-		gsapCtx?.kill();
-		clearTimeout(audioTimeout);
-		document.removeEventListener("visibilitychange", handleVisibilityChange);
-	};
+onDestroy(() => {
+	gsapCtx?.kill();
+	clearTimeout(audioTimeout);
+	document.removeEventListener("visibilitychange", handleVisibilityChange);
 });
 
 function handleMusic() {
@@ -75,7 +113,7 @@ function handleVisibilityChange() {
 </script>
 
 <div
-  class="max-h-svh max-w-full overflow-x-hidden overflow-y-scroll snap-y snap-mandatory parent font-opensans scroll-none"
+  class="h-svh max-w-full overflow-x-hidden overflow-y-scroll snap-y snap-mandatory parent font-opensans scroll-none"
   in:blur={{ duration: 900, delay: 1100, opacity: 80 }}
   bind:this={scrollContainer}
 >
@@ -144,16 +182,22 @@ function handleVisibilityChange() {
     imgUrl={`${PUBLIC_S3_URL}/closing.webp`}
     imgAlt="closing"
   >
-    <div class="flex flex-col text-center h-full justify-center gap-4 text-shadow-lg font-light">
+    <div class="closing-text font-light text-center" bind:this={closingEl}>
       <h2 class="text-2xl font-noto">UCAPAN TERIMA KASIH</h2>
-      <p class="text-sm">Kami mohon maaf apabila ada salah dalam penyebutan nama ataupun gelar.</p>
-      <p class="text-sm">
-        Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
-        Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
-        kehadiran dan doa restunya, kami mengucapkan terima kasih.
-      </p>
-      <p class="text-sm">Wassalamu'alaikum Wr. Wb.</p>
-      <h4 class="text-2xl font-noto tracking-wider">ANGGITA & FUAD</h4>
+      <div class="mt-4">
+        <p class="text-sm">Kami mohon maaf apabila ada salah dalam penyebutan nama ataupun gelar.</p>
+      </div>
+      <div class="mt-4">
+        <p class="text-sm">
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
+          Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas
+          kehadiran dan doa restunya, kami mengucapkan terima kasih.
+        </p>
+      </div>
+      <div class="mt-4">
+        <p class="text-sm">Wassalamu'alaikum Wr. Wb.</p>
+        <h4 class="text-2xl font-noto tracking-wider">ANGGITA & FUAD</h4>
+      </div>
     </div>
   </Section>
   
