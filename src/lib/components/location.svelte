@@ -14,9 +14,7 @@ let gsapCtx: gsap.Context | undefined;
 let wrapperEl: HTMLDivElement;
 let splitTextInstance: SplitText | undefined;
 
-onMount(async () => {
-	await document.fonts.ready;
-
+onMount(() => {
 	const scrollerEl = document.querySelector<HTMLElement>(".parent");
 
 	gsapCtx = gsap.context(() => {
@@ -59,7 +57,7 @@ onDestroy(() => {
 
 <Section
   id="date"
-  imgUrl="{PUBLIC_S3_URL}/location.webp"
+  imgUrl="{PUBLIC_S3_URL}/gallery-2.webp"
   imgAlt="date"
   textContainerClass="justify-center"
 >

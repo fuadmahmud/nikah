@@ -20,29 +20,29 @@ function preloadImages() {
 	imagesPreloaded = true;
 }
 
-onMount(async () => {
-	await document.fonts.ready;
-
+onMount(() => {
 	const scrollerEl = document.querySelector<HTMLElement>(".parent");
 
-	gsapCtx = gsap.context(() => {
-		SplitText.create(".journey-text", {
-			type: "words",
-			reduceWhiteSpace: true,
-			onSplit: (self) => {
-				gsap.from(self.words, {
-					scrollTrigger: {
-						...(scrollerEl ? { scroller: scrollerEl } : {}),
-						trigger: wrapperEl,
-						start: "top 80%",
-						toggleActions: "play pause resume none",
-					},
-					opacity: 0,
-					autoAlpha: 0,
-					stagger: 0.1,
-					duration: 3,
-				});
-			},
+	requestAnimationFrame(() => {
+		gsapCtx = gsap.context(() => {
+			SplitText.create(".journey-text", {
+				type: "words",
+				reduceWhiteSpace: true,
+				onSplit: (self) => {
+					gsap.from(self.words, {
+						scrollTrigger: {
+							...(scrollerEl ? { scroller: scrollerEl } : {}),
+							trigger: wrapperEl,
+							start: "top 80%",
+							toggleActions: "play pause resume none",
+						},
+						opacity: 0,
+						autoAlpha: 0,
+						stagger: 0.1,
+						duration: 3,
+					});
+				},
+			});
 		});
 	});
 

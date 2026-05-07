@@ -29,58 +29,60 @@ onMount(async () => {
 		toggleActions: "restart pause resume pause",
 	});
 
-	gsapCtx = gsap.context(() => {
-		gsap.set(".surah-text", { visibility: "hidden" });
+	requestAnimationFrame(() => {
+		gsapCtx = gsap.context(() => {
+			gsap.set(".surah-text", { visibility: "hidden" });
 
-		gsap.from(".surah-text", {
-			yPercent: -20,
-			autoAlpha: 0,
-			duration: 2,
-			stagger: 0.05,
-			ease: "power3.out",
-			scrollTrigger: {
-				trigger: "#surah",
-			},
-			delay: 0.5,
-		});
-
-		const blocks = [
-			closingEl.querySelector("h2"),
-			...closingEl.querySelectorAll("p"),
-			closingEl.querySelector("h4"),
-		];
-
-		const tl = gsap.timeline({
-			scrollTrigger: {
-				trigger: closingEl,
-				start: "top 80%",
-				toggleActions: "play pause resume none",
-			},
-		});
-
-		for (const block of blocks) {
-			const split = SplitText.create(block, {
-				type: "lines",
-				reduceWhiteSpace: true,
+			gsap.from(".surah-text", {
+				yPercent: -20,
+				autoAlpha: 0,
+				duration: 2,
+				stagger: 0.05,
+				ease: "power3.out",
+				scrollTrigger: {
+					trigger: "#surah",
+				},
+				delay: 0.5,
 			});
 
-			tl.from(
-				split.lines,
-				{
-					opacity: 0,
-					autoAlpha: 0,
-					y: 30,
-					stagger: 0.05,
-					duration: 1,
+			const blocks = [
+				closingEl.querySelector("h2"),
+				...closingEl.querySelectorAll("p"),
+				closingEl.querySelector("h4"),
+			];
+
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: closingEl,
+					start: "top 80%",
+					toggleActions: "play pause resume none",
 				},
-				"+=0.1",
-			);
-		}
+			});
+
+			for (const block of blocks) {
+				const split = SplitText.create(block, {
+					type: "lines",
+					reduceWhiteSpace: true,
+				});
+
+				tl.from(
+					split.lines,
+					{
+						opacity: 0,
+						autoAlpha: 0,
+						y: 30,
+						stagger: 0.05,
+						duration: 1,
+					},
+					"+=0.1",
+				);
+			}
+		});
 	});
 
 	audioTimeout = setTimeout(() => {
 		audioEl.play();
-	}, 500);
+	}, 1000);
 
 	document.addEventListener("visibilitychange", handleVisibilityChange);
 });
@@ -92,6 +94,7 @@ onDestroy(() => {
 });
 
 function handleMusic() {
+	if (!audioEl) return;
 	if (isAudioPlay) {
 		audioEl.pause();
 	} else {
@@ -113,7 +116,7 @@ function handleVisibilityChange() {
 </script>
 
 <div
-  class="h-svh max-w-full overflow-x-hidden overflow-y-scroll snap-y snap-mandatory parent font-opensans scroll-none"
+  class="h-svh w-full overflow-y-scroll snap-y snap-mandatory parent font-opensans scroll-none"
   in:blur={{ duration: 900, delay: 1100, opacity: 80 }}
   bind:this={scrollContainer}
 >
@@ -196,31 +199,38 @@ function handleVisibilityChange() {
       </div>
       <div class="mt-4">
         <p class="text-sm">Wassalamu'alaikum Wr. Wb.</p>
+      </div>
+      <div class="mt-4">
         <h4 class="text-2xl font-noto tracking-wider">ANGGITA & FUAD</h4>
       </div>
     </div>
   </Section>
-  
-  <button
-    class="fixed right-4 top-1/12 z-30 backdrop-blur-xs bg-white/30 text-white p-4 h-6 w-6 rounded-full flex items-center justify-center"
-    type="button"
-    title="Pause music"
-    onclick={handleMusic}
-  >
-    {#if isAudioPlay}
-      <i class="fa-solid fa-pause"></i>
-    {:else}
-      <i class="fa-solid fa-play"></i>
-    {/if}
-  </button>
-
-  <audio bind:this={audioEl} loop class="hidden">
-    <source src="{PUBLIC_S3_URL}/bg-music.mp3" type="audio/mp3" />
-  </audio>
 </div>
+
+<button
+  class="fixed right-4 top-1/12 z-30 backdrop-blur-xs bg-white/30 text-white size-6 p-4 rounded-full flex items-center justify-center"
+  type="button"
+  title="Pause music"
+  onclick={handleMusic}
+>
+  {#if isAudioPlay}
+    <i class="fa-solid fa-pause"></i>
+  {:else}
+    <i class="fa-solid fa-play"></i>
+  {/if}
+</button>
+
+<audio bind:this={audioEl} loop class="hidden">
+  <source src="{PUBLIC_S3_URL}/bg-music.mp3" type="audio/mp3" />
+</audio>
 
 <style lang="scss">
   .parent {
     position: relative;
+    -webkit-overflow-scrolling: touch;
+    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0,0,0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 </style>

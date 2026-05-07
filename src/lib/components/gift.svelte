@@ -204,7 +204,7 @@ async function handleSwap() {
 
 <Section
   id="gift"
-	imgUrl="{PUBLIC_S3_URL}/gallery-3.webp"
+	imgUrl="{PUBLIC_S3_URL}/gift-3.webp"
 	imgAlt="gift"
 >
   <div class="rounded-sm p-4 flex flex-col text-left justify-center gap-4 text-white">

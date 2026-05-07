@@ -1,13 +1,10 @@
 <script lang="ts">
+import Home from "$lib/pages/home.svelte";
 import Splash from "$lib/pages/splash.svelte";
-import type { Component } from "svelte";
 
 let isSplashPage = $state(true);
-let Home = $state<Component<Record<string, never>, object, ""> | null>(null);
 
 const handleOpen = async () => {
-	const component = await import("$lib/pages/home.svelte");
-	Home = component.default;
 	isSplashPage = false;
 };
 </script>
@@ -16,6 +13,6 @@ const handleOpen = async () => {
 {#if isSplashPage}
   <Splash onOpen={handleOpen} />
 {/if}
-{#if !isSplashPage && Home}
+{#if !isSplashPage}
   <Home />
 {/if}

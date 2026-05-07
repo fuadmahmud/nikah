@@ -9,7 +9,7 @@ import { ANON_ID } from "../../constants";
 const ctx = getContext<{ wishes: Wish[] }>("wishes");
 </script>
 
-<div class="overflow-y-scroll w-full flex flex-col max-h-dvh scroll-none mb-4">
+<div class="overflow-y-scroll w-full min-h-0 max-h-svh flex flex-col scroll-none scroll-py-4 pb-24">
 {#if !ctx.wishes.length}
   <p class="text-xs text-white text-center">Be the first one to give us wish</p>
 {/if}

@@ -27,9 +27,9 @@ let wrapperEl: HTMLDivElement;
 let gsapCtx: gsap.Context | undefined;
 
 onMount(async () => {
-	await document.fonts.ready;
+	// await document.fonts.ready;
 
-	const xFrom = position === "left" ? -60 : 60;
+	const xFrom = position === "left" ? -32 : 32;
 	const scrollerEl = document.querySelector<HTMLElement>(".parent");
 
 	gsapCtx = gsap.context(() => {

@@ -23,7 +23,8 @@ const {
 }: SectionProps = $props();
 const rootClass = $derived(
 	clsx(
-		"h-svh w-full relative flex flex-col will-change-transform backface-hidden snap-start bg-cover bg-center",
+		"h-svh w-full relative flex flex-col will-change-transform backface-hidden",
+		"snap-start bg-cover bg-center bg-no-repeat bg-origin-padding",
 		classNames ?? "",
 	),
 );

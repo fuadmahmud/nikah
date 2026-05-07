@@ -2,11 +2,12 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  height: 100%;
+html,
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	scroll-behavior: smooth;
 }
 
 @font-face {

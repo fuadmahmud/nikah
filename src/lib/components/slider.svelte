@@ -2,11 +2,14 @@
 import { onMount, type Snippet } from "svelte";
 import { PUBLIC_S3_URL } from "$env/static/public";
 import { gsap } from "$lib/utils/gsap";
+import type { HTMLAttributes } from "svelte/elements";
+import clsx from "$lib/utils/clsx";
 
-interface SliderProps {
+interface SliderProps extends HTMLAttributes<HTMLElement> {
 	children: Snippet<[]>;
 	id?: string;
 	slides?: string[];
+	contentClass?: string;
 }
 
 const DEFAULT_SLIDES = [
@@ -20,9 +23,14 @@ const OPENING_ID = "opening";
 
 let gsapCtx: gsap.Context;
 let slidesTL: gsap.core.Timeline;
-const { children, id, slides = DEFAULT_SLIDES }: SliderProps = $props();
+const {
+	children,
+	id,
+	contentClass,
+	slides = DEFAULT_SLIDES,
+}: SliderProps = $props();
 
-const slideEls: HTMLDivElement[] = [];
+const slideEls: HTMLDivElement[] = $state([]);
 
 function buildTransitionSegment(tl: gsap.core.Timeline, fromIdx: number) {
 	const toIdx = (fromIdx + 1) % slides.length;
@@ -99,7 +107,7 @@ onMount(() => {
 </script>
 
 <!-- Slider root -->
-<section class="h-svh w-full snap-start" id={id}>
+<section class="h-svh w-full snap-start snap-always bg-white will-change-transform" id={id}>
   <div
     role="region"
     aria-label="Background image slider"
@@ -111,12 +119,15 @@ onMount(() => {
 				bind:this={slideEls[i]}
 				role="img"
 				aria-label="slide-{i}"
-				class="absolute inset-0 bg-cover bg-center will-change-transform"
+				class="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
 				style="background-image: url({slide})"
 			></div>
     {/each}
 		<div class="bg-black/30 h-full w-full absolute inset-0 z-10"></div>
-    <div class="z-20 relative w-full flex flex-col text-white p-8 items-center-safe">
+    <div class={clsx(
+			"z-20 relative w-full flex flex-col text-white p-8 items-center-safe",
+			contentClass || ""
+		)}>
       {@render children()}
     </div>
   </div>
