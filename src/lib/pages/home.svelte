@@ -13,6 +13,7 @@ import Wishes from "../components/wishes.svelte";
 import WishForm from "../components/wish-form.svelte";
 import { WISH_SLIDER_IMAGES } from "../../constants";
 import Journey from "$lib/components/journey.svelte";
+import NavDots from "$lib/components/nav-dots.svelte";
 
 let audioEl: HTMLAudioElement;
 let isAudioPlay = $state(true);
@@ -219,6 +220,7 @@ function handleVisibilityChange() {
     <i class="fa-solid fa-play"></i>
   {/if}
 </button>
+<NavDots {scrollContainer} />
 
 <audio bind:this={audioEl} loop class="hidden">
   <source src="{PUBLIC_S3_URL}/bg-music.mp3" type="audio/mp3" />
