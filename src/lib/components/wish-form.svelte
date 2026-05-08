@@ -4,12 +4,11 @@ import Input from "./input.svelte";
 import { gsap } from "$lib/utils/gsap";
 import { enhance } from "$app/forms";
 import { getContext } from "svelte";
-import type { Giphy, GiphyResponse, Guest } from "../../types";
+import type { EnhancedImage, Giphy, GiphyResponse, Guest } from "../../types";
 import type { ChangeEventHandler } from "svelte/elements";
 import { Dialog, Separator } from "bits-ui";
 import { debounce } from "$lib/utils/debounce";
-import { PUBLIC_S3_URL } from "$env/static/public";
-import Section from "./section.svelte";
+import Slider from "./slider.svelte";
 
 const guest = getContext<() => Guest>("guest");
 const STEPS = ["name", "rsvp", "wishes", "submit"];
@@ -24,6 +23,16 @@ let values = $state({
 	wishes: "",
 	gifUrl: "",
 });
+
+const EnhancedSlides = import.meta.glob(
+	"/src/lib/assets/images/wishes/*.webp",
+	{
+		eager: true,
+		query: { enhanced: true },
+	},
+) as Record<string, { default: EnhancedImage }>;
+
+const slides = Object.values(EnhancedSlides).map((slide) => slide.default);
 
 const handleNext = () => {
 	const next = Math.min(currentStep + 1, LAST);
@@ -90,12 +99,7 @@ const handleSearchGif = debounce(async (q: string) => {
 }, 400);
 </script>
 
-<Section
-  id="wish-form"
-  imgUrl={`${PUBLIC_S3_URL}/wish-2.webp`}
-  imgAlt="wish-form"
-  overlayClass="bg-black/10"
->
+<Slider id="wishes" slides={slides}>
   <div class="flex flex-col text-left h-full gap-4">
     <div class="text-shadow-readable">
       <h2 class="text-2xl font-noto text-center">UCAPAN DAN DOA</h2>
@@ -324,4 +328,4 @@ const handleSearchGif = debounce(async (q: string) => {
       </div>
     </form>
   </div>
-</Section>
+</Slider>

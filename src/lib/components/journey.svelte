@@ -1,9 +1,9 @@
 <script lang="ts">
-import { PUBLIC_S3_URL } from "$env/static/public";
 import { onMount, onDestroy } from "svelte";
 import Section from "./section.svelte";
 import { gsap, SplitText } from "$lib/utils/gsap";
 import { GALLERY_IMAGES } from "../../constants";
+import JourneyImage from "$lib/assets/images/journey/journey.webp?enhanced";
 
 let imagesPreloaded = $state(false);
 let wrapperEl: HTMLDivElement;
@@ -55,7 +55,7 @@ onDestroy(() => {
 </script>
 <Section
   id="journey"
-  imgUrl="{PUBLIC_S3_URL}/journey.webp"
+  bgImage={JourneyImage}
   imgAlt="journey"
   textContainerClass="p-8"
 >

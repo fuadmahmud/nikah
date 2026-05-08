@@ -5,6 +5,7 @@ import clsx from "$lib/utils/clsx";
 import { tick } from "svelte";
 import Section from "./section.svelte";
 import { gsap, Flip } from "$lib/utils/gsap";
+import Gift3 from "$lib/assets/images/gift/gift-3.webp?enhanced";
 
 type Particle = {
 	id: number;
@@ -204,7 +205,7 @@ async function handleSwap() {
 
 <Section
   id="gift"
-	imgUrl="{PUBLIC_S3_URL}/gift-3.webp"
+	bgImage={Gift3}
 	imgAlt="gift"
 >
   <div class="rounded-sm p-4 flex flex-col text-left justify-center gap-4 text-white">

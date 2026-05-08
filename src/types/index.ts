@@ -5,6 +5,7 @@ export type Guest = {
 	salutation: string | null;
 	created_at: Date | null;
 };
+
 export type Wish = {
 	guestName: string | null;
 	guestSalutation: string | null;
@@ -16,6 +17,11 @@ export type Wish = {
 	created_at: Date | null;
 	guest_id: number | null;
 	rsvp: boolean | null;
+};
+
+export type EnhancedImage = {
+	sources: Record<string, string>;
+	img: { src: string; w: number; h: number };
 };
 
 export interface GiphyResponse {

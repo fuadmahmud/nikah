@@ -1,22 +1,27 @@
 <script lang="ts">
 import { onMount, type Snippet } from "svelte";
-import { PUBLIC_S3_URL } from "$env/static/public";
 import { gsap } from "$lib/utils/gsap";
 import type { HTMLAttributes } from "svelte/elements";
 import clsx from "$lib/utils/clsx";
+import type { EnhancedImage } from "../../types";
 
 interface SliderProps extends HTMLAttributes<HTMLElement> {
 	children: Snippet<[]>;
 	id?: string;
-	slides?: string[];
+	slides?: EnhancedImage[];
 	contentClass?: string;
 }
 
-const DEFAULT_SLIDES = [
-	`${PUBLIC_S3_URL}/slider-1.webp`,
-	`${PUBLIC_S3_URL}/slider-2.webp`,
-	`${PUBLIC_S3_URL}/slider-3.webp`,
-];
+const DEFAULT_SLIDES = import.meta.glob(
+	"/src/lib/assets/images/opening/*.webp",
+	{
+		eager: true,
+		query: { enhanced: true },
+	},
+) as Record<string, { default: EnhancedImage }>;
+
+const localSlides = Object.values(DEFAULT_SLIDES).map((slide) => slide.default);
+
 const SLIDE_DURATION = 2;
 const TRANSITION = 1.3;
 const OPENING_ID = "opening";
@@ -27,7 +32,7 @@ const {
 	children,
 	id,
 	contentClass,
-	slides = DEFAULT_SLIDES,
+	slides = localSlides,
 }: SliderProps = $props();
 
 const slideEls: HTMLDivElement[] = $state([]);
@@ -107,7 +112,7 @@ onMount(() => {
 </script>
 
 <!-- Slider root -->
-<section class="h-svh w-full snap-start snap-always bg-white will-change-transform" id={id}>
+<section class="h-svh w-svw snap-start snap-always bg-white will-change-transform" id={id}>
   <div
     role="region"
     aria-label="Background image slider"
@@ -115,13 +120,13 @@ onMount(() => {
   >
     <!-- Slides -->
     {#each slides as slide, i (slide)}
-			<div
+			<enhanced:img
 				bind:this={slideEls[i]}
-				role="img"
-				aria-label="slide-{i}"
-				class="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
-				style="background-image: url({slide})"
-			></div>
+				alt="slide-{i}"
+				class="h-svh w-svw absolute inset-0 object-cover object-center will-change-transform"
+				src={slide}
+				fetchpriority="high"
+			/>
     {/each}
 		<div class="bg-black/30 h-full w-full absolute inset-0 z-10"></div>
     <div class={clsx(

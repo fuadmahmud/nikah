@@ -11,14 +11,15 @@ import Location from "../components/location.svelte";
 import Gift from "../components/gift.svelte";
 import Wishes from "../components/wishes.svelte";
 import WishForm from "../components/wish-form.svelte";
-import { WISH_SLIDER_IMAGES } from "../../constants";
 import Journey from "$lib/components/journey.svelte";
 import NavDots from "$lib/components/nav-dots.svelte";
+import Seating from "$lib/assets/images/surah/seating.webp?enhanced";
+import Closing from "$lib/assets/images/closing/closing.webp?enhanced";
 
 let audioEl: HTMLAudioElement;
 let isAudioPlay = $state(true);
 let audioTimeout: ReturnType<typeof setTimeout>;
-let scrollContainer: HTMLDivElement;
+let scrollContainer: HTMLDivElement | undefined = $state(undefined);
 let closingEl: HTMLDivElement;
 let gsapCtx: gsap.Context | undefined;
 
@@ -135,8 +136,8 @@ function handleVisibilityChange() {
 
   <Section
     id="surah"
-    imgUrl="{PUBLIC_S3_URL}/seating.webp"
     imgAlt="surah"
+    bgImage={Seating}
   >
     <div class="text-left h-max overflow-hidden rounded-md p-2 mt-[25%]">
       <div class="surah-text flex flex-col justify-end gap-4 text-shadow-readable">
@@ -148,7 +149,6 @@ function handleVisibilityChange() {
 
   <Person
     role="bride"
-    imgEndpoint="bride.webp"
     name="Anggita Kusuma Putri"
     child="Putri terakhir"
     parent="Bapak Anwar Kusni dan Ibu Sri Suripni"
@@ -158,7 +158,6 @@ function handleVisibilityChange() {
 
   <Person
     role="groom"
-    imgEndpoint="groom.webp"
     name="Fuad Mahmud Ibrahim"
     child="Putra pertama"
     parent="Alm. H. Sunarto dan Hj. Puspita Sari"
@@ -174,17 +173,14 @@ function handleVisibilityChange() {
 
   <WishForm />
 
-  <Slider id="wishes" slides={WISH_SLIDER_IMAGES}>
-    <h2 class="text-2xl font-noto font-light w-full border-b border-slate-300 pb-1 mb-2">Ucapan</h2>
-    <Wishes />
-  </Slider>
+  <Wishes />
 
   <Gift />
 
   <Section
     id="closing"
-    imgUrl={`${PUBLIC_S3_URL}/closing.webp`}
     imgAlt="closing"
+    bgImage={Closing}
   >
     <div class="closing-text font-light text-center" bind:this={closingEl}>
       <h2 class="text-2xl font-noto">UCAPAN TERIMA KASIH</h2>

@@ -1,5 +1,22 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
+
+declare module "*&enhanced" {
+	const value: {
+		sources: Record<string, string>;
+		img: { src: string; w: number; h: number };
+	};
+	export default value;
+}
+
+declare module "*?enhanced" {
+	const value: {
+		sources: Record<string, string>;
+		img: { src: string; w: number; h: number };
+	};
+	export default value;
+}
+
 declare global {
 	namespace App {
 		// interface Error {}

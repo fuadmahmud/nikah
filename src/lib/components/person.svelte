@@ -1,11 +1,11 @@
 <script lang="ts">
-import { PUBLIC_S3_URL } from "$env/static/public";
 import { onDestroy, onMount } from "svelte";
 import { gsap } from "$lib/utils/gsap";
 import Section from "./section.svelte";
+import Groom from "$lib/assets/images/person/groom.webp?enhanced";
+import Bride from "$lib/assets/images/person/bride.webp?enhanced";
 
 interface Person {
-	imgEndpoint: string;
 	role: string;
 	name: string;
 	child: string;
@@ -14,21 +14,19 @@ interface Person {
 	position: "left" | "right";
 }
 
-const { imgEndpoint, role, name, child, parent, social, position }: Person =
-	$props();
+const { role, name, child, parent, social, position }: Person = $props();
 const classes = $derived(
 	position === "left"
 		? "flex flex-col gap-2 justify-end text-left person-wrapper"
 		: "flex flex-col gap-2 justify-end text-right items-end p-2 w-full person-wrapper",
 );
+const bgImage = $derived(role === "groom" ? Groom : Bride);
 
 let socialEl: HTMLAnchorElement;
 let wrapperEl: HTMLDivElement;
 let gsapCtx: gsap.Context | undefined;
 
-onMount(async () => {
-	// await document.fonts.ready;
-
+onMount(() => {
 	const xFrom = position === "left" ? -32 : 32;
 	const scrollerEl = document.querySelector<HTMLElement>(".parent");
 
@@ -66,8 +64,8 @@ onDestroy(() => {
 </script>
 <Section
   id={role}
-  imgUrl="{PUBLIC_S3_URL}/{imgEndpoint}"
   imgAlt={role}
+	bgImage={bgImage}
 	textContainerClass="mt-auto"
 >
   <div bind:this={wrapperEl} class={classes}>

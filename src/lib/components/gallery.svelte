@@ -1,8 +1,8 @@
 <script lang="ts">
-import { PUBLIC_S3_URL } from "$env/static/public";
-import { fly } from "svelte/transition";
+import { gsap } from "$lib/utils/gsap";
 import Section from "./section.svelte";
 import { GALLERY_IMAGES as photos } from "../../constants";
+import JourneyImage from "$lib/assets/images/journey/journey.webp?enhanced";
 
 let currentPhoto = $state(0);
 let direction = $state(1);
@@ -18,24 +18,39 @@ function previousPhoto() {
 	direction = -1;
 	currentPhoto = currentPhoto - 1;
 }
+
+$effect(() => {
+	const idx = currentPhoto;
+
+	requestAnimationFrame(() => {
+		const el = document.querySelector(`[data-photo="${idx}"]`);
+		if (el) {
+			gsap.fromTo(
+				el,
+				{ x: direction > 0 ? "100%" : "-100%" },
+				{ x: "0%", duration: 0.5, ease: "power2.out", clearProps: "x" },
+			);
+		}
+	});
+});
 </script>
 <Section
   id="gallery"
-  imgUrl={`${PUBLIC_S3_URL}/journey.webp`}
+  bgImage={JourneyImage}
   imgAlt="gallery"
   textContainerClass="h-dvh bg-black/20 p-4"
 >
   <div class="flex flex-col text-left gap-4 h-full relative overflow-hidden">
     <div class="relative w-full h-full overflow-hidden">
-      {#key currentPhoto}
+      {#each photos as photo, i (photo)}
         <img
-          src={photos[currentPhoto]}
+          src={photo}
           alt="Gallery"
+          data-photo={i}
           class="w-full h-full object-cover absolute inset-0 will-change-transform"
-          in:fly={{ x: direction > 0 ? '100%' : '-100%', duration: 500, opacity: 1 }}
-          out:fly={{ x: direction > 0 ? '-100%' : '100%', duration: 500, opacity: 1 }}
+          class:hidden={i !== currentPhoto}
         />
-      {/key}
+      {/each}
     </div>
     <button
       onclick={previousPhoto}

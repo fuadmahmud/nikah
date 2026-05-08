@@ -1,11 +1,11 @@
 <script lang="ts">
-import { PUBLIC_S3_URL } from "$env/static/public";
 import formatDate from "$lib/utils/formatDate";
 import { onDestroy, onMount } from "svelte";
 import { WEDDING_DATE } from "../../constants";
 import Counter from "./counter.svelte";
 import Section from "./section.svelte";
 import { gsap, SplitText } from "$lib/utils/gsap";
+import Gallery2 from "$lib/assets/images/location/gallery-2.webp?enhanced";
 
 const ADDRESS =
 	"Jl. Balai Rakyat, RT.8/RW.10, Utan Kayu Utara, Kec. Matraman, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13120";
@@ -57,7 +57,7 @@ onDestroy(() => {
 
 <Section
   id="date"
-  imgUrl="{PUBLIC_S3_URL}/gallery-2.webp"
+  bgImage={Gallery2}
   imgAlt="date"
   textContainerClass="justify-center"
 >

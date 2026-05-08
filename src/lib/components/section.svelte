@@ -2,9 +2,10 @@
 import clsx from "$lib/utils/clsx";
 import type { Snippet } from "svelte";
 import type { HTMLAttributes } from "svelte/elements";
+import type { EnhancedImage } from "../../types";
 interface SectionProps extends HTMLAttributes<HTMLElement> {
-	imgUrl: string;
 	imgAlt: string;
+	bgImage: EnhancedImage;
 	children: Snippet<[]>;
 	classNames?: string;
 	textContainerClass?: string;
@@ -13,18 +14,17 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
 
 const {
 	id,
-	imgUrl,
 	imgAlt,
 	classNames,
 	textContainerClass,
 	children,
 	overlayClass,
+	bgImage,
 	...props
 }: SectionProps = $props();
 const rootClass = $derived(
 	clsx(
-		"h-svh w-full relative flex flex-col will-change-transform backface-hidden",
-		"snap-start bg-cover bg-center bg-no-repeat bg-origin-padding",
+		"h-svh w-svw relative flex flex-col will-change-transform snap-start",
 		classNames ?? "",
 	),
 );
@@ -39,11 +39,14 @@ const contentClass = $derived(
 <section
 	class={rootClass}
 	id={id}
-	style="background-image: url({imgUrl})"
-	role="img"
-	aria-label={imgAlt ?? `bg-${id}`}
 	{...props}
 >
+	<enhanced:img
+		alt={imgAlt}
+		class="h-svh w-svw absolute inset-0 object-cover object-center will-change-transform"
+		src={bgImage}
+		fetchpriority="high"
+	/>
 	<div class={clsx(
 		"bg-black/30 h-full w-full absolute inset-0 z-10",
 		overlayClass || ''
