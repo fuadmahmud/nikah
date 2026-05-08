@@ -99,7 +99,7 @@ const handleSearchGif = debounce(async (q: string) => {
 }, 400);
 </script>
 
-<Slider id="wishes" slides={slides}>
+<Slider id="wish-form" slides={slides}>
   <div class="flex flex-col text-left h-full gap-4">
     <div class="text-shadow-readable">
       <h2 class="text-2xl font-noto text-center">UCAPAN DAN DOA</h2>
