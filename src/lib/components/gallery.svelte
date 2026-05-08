@@ -76,7 +76,7 @@ $effect(() => {
         </path>
       </svg> 
     </button>
-    <h2 class="text-2xl font-noto font-light w-full text-white mb-2 absolute bottom-8 text-center">OUR GALLERY</h2>
+    <h2 class="text-2xl font-noto font-light w-full text-white mb-2 absolute top-8 text-center text-shadow-readable">OUR GALLERY</h2>
     <i class="text-sm font-light absolute left-3 bottom-2">{currentPhoto + 1}/{photos.length}</i>
   </div>
 </Section>

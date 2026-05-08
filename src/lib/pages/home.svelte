@@ -181,6 +181,7 @@ function handleVisibilityChange() {
     id="closing"
     imgAlt="closing"
     bgImage={Closing}
+    textContainerClass="h-svh"
   >
     <div class="closing-text font-light text-center" bind:this={closingEl}>
       <h2 class="text-2xl font-noto">UCAPAN TERIMA KASIH</h2>
@@ -201,6 +202,7 @@ function handleVisibilityChange() {
         <h4 class="text-2xl font-noto tracking-wider">ANGGITA & FUAD</h4>
       </div>
     </div>
+    <p class="mt-auto text-xs font-light text-center">Made with 💖 by Anggita & Fuad</p>
   </Section>
 </div>
 
