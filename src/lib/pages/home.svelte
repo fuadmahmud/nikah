@@ -202,7 +202,7 @@ function handleVisibilityChange() {
         <h4 class="text-2xl font-noto tracking-wider">ANGGITA & FUAD</h4>
       </div>
     </div>
-    <p class="mt-auto text-xs font-light text-center">Made with 💖 by Anggita & Fuad</p>
+    <p class="mt-auto text-xs font-light text-center">Made with 🤍 by Anggita & Fuad</p>
   </Section>
 </div>
 
