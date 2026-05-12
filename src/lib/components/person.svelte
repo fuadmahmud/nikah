@@ -42,7 +42,6 @@ onMount(() => {
 				id: `person-${role}`,
 				...(scrollerEl ? { scroller: scrollerEl } : {}),
 				trigger: wrapperEl,
-				start: "top 85%",
 				onEnter: () => tl.restart(true),
 				onEnterBack: () => tl.restart(true),
 				invalidateOnRefresh: true,

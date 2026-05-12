@@ -259,7 +259,7 @@ async function handleSwap() {
 								{/if}
 							{/each}
 							<button
-								class="text-xs p-3 rounded-sm text-neutral-800 lg:w-1/2 cursor-pointer border border-neutral-400"
+								class="text-xs p-3 rounded-sm text-neutral-800 cursor-pointer border border-neutral-400"
 								type="button"
 								onclick={(e) => {
 									e.stopPropagation();

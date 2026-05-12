@@ -57,7 +57,7 @@ const slides = Object.values(EnhancedSlides).map((slide) => slide.default);
           src="{wish.gif_url}"
           alt="Gif comment {wish.id}"
           class={clsx(
-            "w-1/2 h-1/2 object-cover rounded-sm mt-2",
+            "w-1/2 h-1/2 object-cover rounded-sm mt-2 md:w-1/4 md:h-1/4",
             index % 2 !== 0 ? "ml-auto" : ""
           )}
           loading="lazy"

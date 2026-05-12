@@ -55,7 +55,7 @@ $effect(() => {
     <button
       onclick={previousPhoto}
       type="button"
-      class="absolute top-1/2 left-3 text-white disabled:text-white/30 flex items-center justify-center text-sm"
+      class="absolute top-1/2 left-3 text-white disabled:text-white/30 flex items-center justify-center text-sm cursor-pointer"
       title="Previous"
       disabled={currentPhoto === 0}
     >
@@ -67,7 +67,7 @@ $effect(() => {
     <button
       onclick={nextPhoto}
       type="button"
-      class="absolute top-1/2 right-3 text-white disabled:text-white/30 text-sm"
+      class="absolute top-1/2 right-3 text-white disabled:text-white/30 text-sm cursor-pointer"
       title="Next"
       disabled={currentPhoto === photos.length - 1}
     >
