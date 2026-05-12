@@ -1,5 +1,6 @@
 <script lang="ts">
 import { ScrollTrigger } from "$lib/utils/gsap";
+import clsx from "clsx";
 
 interface Props {
 	scrollContainer: HTMLDivElement;
@@ -18,7 +19,12 @@ let activeSection = $state("");
 $effect(() => {
 	if (!scrollContainer) return;
 
-	for (const section of sections) {
+	const newSection = [
+		...sections,
+		{ id: "groom", label: "Groom" },
+		{ id: "bride", label: "Bride" },
+	];
+	for (const section of newSection) {
 		const el = document.getElementById(section.id);
 		if (!el) return;
 
@@ -45,13 +51,23 @@ function scrollToSection(id: string) {
 </script>
 
 <div
-	class="fixed right-4 bottom-0 -translate-y-1/2 z-50 flex flex-col gap-3 font-opensans"
+	class={clsx(
+		"fixed bottom-0 -translate-y-1/2 z-50 flex flex-col gap-3 font-opensans",
+		activeSection === "groom"
+			? "left-4"
+			: "right-4"
+	)}
 >
 	{#each sections as section (section.id)}
 		<button
 			type="button"
 			title={section.label}
-			class="group flex items-center justify-end gap-2"
+			class={clsx(
+				"group flex items-center justify-end gap-2",
+				activeSection === "groom"
+					? "flex-row-reverse"
+					: ""
+			)}
 			onclick={() => scrollToSection(section.id)}
 		>
 			<span

@@ -1,11 +1,12 @@
 <script lang="ts">
-import { PUBLIC_S3_URL } from "$env/static/public";
 import { Avatar, Separator } from "bits-ui";
 import clsx from "$lib/utils/clsx";
 import { tick } from "svelte";
 import Section from "./section.svelte";
 import { gsap, Flip } from "$lib/utils/gsap";
 import Gift3 from "$lib/assets/images/gift/gift-3.webp?enhanced";
+import Groom from "$lib/assets/images/person/groom.webp";
+import Bride from "$lib/assets/images/person/bride.webp";
 
 type Particle = {
 	id: number;
@@ -237,7 +238,7 @@ async function handleSwap() {
 							<div
 								class="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-transparent"
 							>
-								<Avatar.Image src="{PUBLIC_S3_URL}/{account.img}" alt={account.name} />
+								<Avatar.Image src={account.fallback === "FMI" ? Groom : Bride} alt={account.name} />
 								<Avatar.Fallback class="border-muted border">{account.fallback}</Avatar.Fallback>
 							</div>
 						</Avatar.Root>
