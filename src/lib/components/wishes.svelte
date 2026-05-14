@@ -19,7 +19,7 @@ const EnhancedSlides = import.meta.glob(
 const slides = Object.values(EnhancedSlides).map((slide) => slide.default);
 </script>
 
-<Slider id="wishes" slides={slides}>
+<Slider id="wishes-section" slides={slides}>
   <h2 class="text-2xl font-noto font-light w-full border-b border-slate-300 pb-1 mb-2">Ucapan</h2>
   <div class="overflow-y-scroll w-full min-h-0 max-h-svh flex flex-col scroll-none scroll-py-4 pb-24">
   {#if !ctx.wishes.length}

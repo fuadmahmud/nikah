@@ -3,7 +3,7 @@ import clsx from "../utils/clsx";
 import Input from "./input.svelte";
 import { gsap } from "$lib/utils/gsap";
 import { enhance } from "$app/forms";
-import { getContext } from "svelte";
+import { getContext, tick } from "svelte";
 import type { EnhancedImage, Giphy, GiphyResponse, Guest } from "../../types";
 import type { ChangeEventHandler } from "svelte/elements";
 import { Dialog, Separator } from "bits-ui";
@@ -17,6 +17,7 @@ let formEl: HTMLFormElement;
 let currentStep = $state(0);
 let name = $state(guest().name);
 let disabled = $derived(!name);
+let showSuccess = $state(false);
 let gifResults = $state<Giphy[]>([]);
 let values = $state({
 	rsvp: true,
@@ -97,6 +98,16 @@ const handleSearchGif = debounce(async (q: string) => {
 	const responseJson: GiphyResponse = await res.json();
 	gifResults = responseJson.data;
 }, 400);
+
+const onOpenChange = async (isOpen: boolean) => {
+	showSuccess = isOpen;
+	if (!isOpen) {
+		await tick();
+
+		const targetEl = document.getElementById("wishes-section");
+		targetEl?.scrollIntoView({ behavior: "smooth" });
+	}
+};
 </script>
 
 <Slider id="wish-form" slides={slides}>
@@ -135,7 +146,9 @@ const handleSearchGif = debounce(async (q: string) => {
 
         return async ({ update }) => {
           await update({ reset: false });
+          currentStep = 0;
           disabled = false;
+          showSuccess = true;
         }
       }}
     >
@@ -327,5 +340,30 @@ const handleSearchGif = debounce(async (q: string) => {
         </button>
       </div>
     </form>
+
+    <Dialog.Root open={showSuccess} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Overlay
+          class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80"
+        />
+        <Dialog.Content
+          class="rounded-sm bg-olive-300 shadow-popover data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 outline-hidden fixed left-[50%] top-[50%] z-50 w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] border p-5 sm:max-w-[122.5] md:w-full"
+        >
+          <Dialog.Title
+            class="flex w-full items-center justify-center text-lg font-opensans text-neutral-800"
+          >
+            Berhasil
+          </Dialog.Title>
+          <p class="text-center text-sm text-neutral-800/80 mt-2">
+            Ucapan dan doa Anda berhasil dikirim. Terima kasih atas ucapan dan doa yang diberikan
+          </p>
+          <Dialog.Close
+          class="text-sm p-3 rounded-sm text-neutral-800 bg-white cursor-pointer flex-1 mt-6 w-full"
+        >
+            OK
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   </div>
 </Slider>
