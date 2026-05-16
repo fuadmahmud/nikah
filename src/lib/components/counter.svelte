@@ -1,4 +1,5 @@
 <script lang="ts">
+import { format, addHours } from "date-fns";
 import { WEDDING_DATE } from "../../constants";
 
 const TIME_LABEL = ["days", "hours", "minutes", "seconds"];
@@ -16,6 +17,48 @@ function getTimer(date: Date): string {
 	const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
 
 	return `${pad(days)} ${pad(hours)} ${pad(minutes)} ${pad(seconds)}`;
+}
+
+function saveTheDate() {
+	const start = WEDDING_DATE;
+	const end = addHours(start, 2);
+	const fmtUTC = (d: Date) => {
+		const shifted = new Date(d.getTime() + d.getTimezoneOffset() * 60000);
+		return format(shifted, "yyyyMMdd'T'HHmmss") + "Z";
+	};
+
+	if (
+		/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+		(navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+	) {
+		const reminder = new Date(start.getTime() - 2 * 60 * 60 * 1000);
+		const ics = [
+			"BEGIN:VCALENDAR",
+			"VERSION:2.0",
+			"PRODID:-//Nikah//Wedding//EN",
+			"BEGIN:VEVENT",
+			`DTSTART:${fmtUTC(start)}`,
+			`DTEND:${fmtUTC(end)}`,
+			"SUMMARY:Anggita & Fuad Wedding Day",
+			"DESCRIPTION:Save the date for our wedding!",
+			"BEGIN:VALARM",
+			`TRIGGER;VALUE=DATE-TIME:${fmtUTC(reminder)}`,
+			"ACTION:DISPLAY",
+			"DESCRIPTION:Wedding starts soon!",
+			"END:VALARM",
+			"END:VEVENT",
+			"END:VCALENDAR",
+		].join("\r\n");
+		const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+		window.open(URL.createObjectURL(blob), "_blank");
+	} else {
+		const params = new URLSearchParams({
+			action: "TEMPLATE",
+			text: "Anggita & Fuad Wedding Day",
+			dates: `${fmtUTC(start)}/${fmtUTC(end)}`,
+		});
+		window.open(`https://www.google.com/calendar/render?${params}`, "_blank");
+	}
 }
 
 $effect(() => {
@@ -40,4 +83,10 @@ $effect(() => {
       </div>
     {/each}
   </div>
+  <button
+    onclick={saveTheDate}
+    class="mt-4 text-sm text-center backdrop-blur-xs bg-white/30 p-3 rounded-sm text-white font-opensans"
+  >
+    SAVE THE DATE
+  </button>
 </div>
