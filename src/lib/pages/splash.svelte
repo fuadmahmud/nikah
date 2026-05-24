@@ -46,7 +46,7 @@ const year = WEDDING_DATE.getFullYear();
       </p>
       <button class="mt-4 text-sm backdrop-blur-xs bg-white/30 p-3 rounded-sm text-white lg:w-1/2 mx-auto cursor-pointer" type="button" onclick={onOpen} id="btn-open">
         <i class="fa-regular fa-envelope-open mr-1"></i>
-        OPEN INVITATION
+        BUKA UNDANGAN
       </button>
     </div>
   </div>

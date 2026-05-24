@@ -87,6 +87,6 @@ $effect(() => {
     onclick={saveTheDate}
     class="mt-4 text-sm text-center backdrop-blur-xs bg-white/30 p-3 rounded-sm text-white font-opensans"
   >
-    SAVE THE DATE
+    SIMPAN KE KALENDER
   </button>
 </div>

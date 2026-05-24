@@ -9,9 +9,9 @@ interface Props {
 const { scrollContainer }: Props = $props();
 
 const sections = [
-	{ id: "date", label: "Date" },
-	{ id: "gallery", label: "Gallery" },
-	{ id: "wish-form", label: "RSVP" },
+	{ id: "date", label: "Tanggal & Lokasi" },
+	{ id: "gallery", label: "Galeri" },
+	{ id: "wish-form", label: "RVSP & Ucapan" },
 ];
 
 let activeSection = $state("");

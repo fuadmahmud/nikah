@@ -132,6 +132,7 @@ function handleVisibilityChange() {
     <div class="arrow border rounded-full border-olive-300 h-10 w-10 p-2 relative mt-2 flex items-center justify-center">
       <i class="fa-solid fa-angle-down font-light -mt-1"></i>
     </div>
+    <p class="mt-3 text-white text-sm">Scroll ke bawah untuk melanjutkan</p>
   </Slider>
 
   <Section
